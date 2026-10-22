@@ -16,6 +16,8 @@
             --gold: #d4af37;
             --siren-blue: #00e5ff;
             --siren-red: #ff1744;
+            --radio-dark: #121820;
+            --radio-screen: #9bc53d;
         }
 
         * { box-sizing: border-box; }
@@ -334,10 +336,10 @@
         .pacman-input:focus { border-color: #00e5ff; }
         .pacman-input:read-only { background: #0d2818; border-color: #00e676; color: #b9f6ca; }
 
-        /* SCHERM 8: COMPOSIET APPLICATIE */
+        /* SCHERM 8: COMPOSIET APPLICATIE & PORTOFOON */
         .composiet-grid {
             display: grid;
-            grid-template-columns: 350px 1fr 360px;
+            grid-template-columns: 360px 1fr 360px;
             height: 100%;
             background: #eef2f7;
             overflow: hidden;
@@ -348,7 +350,7 @@
             border-right: 2px solid #cfd8dc;
             display: flex;
             flex-direction: column;
-            padding: 15px;
+            padding: 12px;
             overflow-y: auto;
         }
 
@@ -460,8 +462,91 @@
             border-radius: 4px;
             font-size: 0.75em;
             font-weight: bold;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             text-align: center;
+        }
+
+        /* PORTOFOON INTERFACE */
+        .walkie-talkie {
+            background: var(--radio-dark);
+            border: 3px solid #2d3748;
+            border-radius: 12px;
+            padding: 10px;
+            margin-top: 10px;
+            box-shadow: inset 0 0 10px #000;
+            color: #fff;
+            position: relative;
+        }
+
+        .radio-lcd {
+            background: var(--radio-screen);
+            color: #1a2e05;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid #5a731e;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 8px;
+        }
+
+        .radio-lcd.transmitting {
+            background: #ff5252;
+            color: #fff;
+            border-color: #b71c1c;
+            animation: radioBlink 0.4s infinite alternate;
+        }
+
+        .radio-lcd.receiving {
+            background: #00e5ff;
+            color: #003082;
+            border-color: #0091ea;
+        }
+
+        @keyframes radioBlink {
+            0% { opacity: 0.9; }
+            100% { opacity: 1; filter: brightness(1.2); }
+        }
+
+        .ptt-button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(180deg, #d32f2f, #8e0000);
+            border: 2px solid #ff7961;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            touch-action: none;
+            user-select: none;
+            transition: all 0.1s;
+        }
+
+        .ptt-button:active, .ptt-button.active {
+            background: linear-gradient(180deg, #b71c1c, #d32f2f);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.8);
+            transform: translateY(2px);
+            border-color: #fff;
+        }
+
+        .radio-traffic-log {
+            font-size: 0.7em;
+            color: #90a4ae;
+            margin-top: 6px;
+            text-align: center;
+            min-height: 16px;
         }
 
         .feed-container {
@@ -472,7 +557,7 @@
             border-radius: 8px;
             border: 1px solid #cfd8dc;
             padding: 10px;
-            max-height: 140px;
+            max-height: 120px;
             overflow-y: auto;
         }
 
@@ -489,7 +574,7 @@
         <button class="nav-btn" onclick="showScreen(5)">4. Oefen 2</button>
         <button class="nav-btn" onclick="showScreen(6)">5. Oefen 3 zij/hun</button>
         <button class="nav-btn" onclick="showScreen(7)">6. Pacman Woordenschat</button>
-        <button class="nav-btn" onclick="showScreen(8)">7. Composietkamer & Mutatie</button>
+        <button class="nav-btn" onclick="showScreen(8)">7. Composiet & Portofoon</button>
     </nav>
 
     <!-- SCHERM 1: INLOGGEN -->
@@ -574,9 +659,8 @@
         <iframe src="https://learningapps.org/watch?v=pewm1q7tc24" allowfullscreen></iframe>
     </div>
 
-    <!-- SCHERM 7: PACMAN WOORDENSCHAT GAME (RECHTSTREEKS INGEBOUWD MET ALLE 48 WOORDEN) -->
+    <!-- SCHERM 7: PACMAN WOORDENSCHAT GAME (MET ALLE 48 WOORDEN) -->
     <div id="screen-7" class="screen">
-        <!-- PACMAN DASHBOARD -->
         <div class="pacman-dashboard">
             <div><i class="fa-solid fa-car-side" style="color:#00e5ff;"></i> <strong>Politie Patrouille 25x30</strong></div>
             <div>Score: <span id="pScore" style="color:var(--gold); font-weight:bold;">0</span></div>
@@ -600,7 +684,6 @@
             </div>
         </div>
 
-        <!-- MODAL POPUP: WOORDENBANK & TYPEN (10 WOORDEN -> 5 DEFINITIES) -->
         <div class="pacman-modal" id="pModal" style="display:none;">
             <div class="pacman-modal-card">
                 <h3 style="margin:0; color:#00e5ff; text-transform:uppercase;"><i class="fa-solid fa-keyboard"></i> Politie Kennisverificatie</h3>
@@ -618,12 +701,12 @@
         </div>
     </div>
 
-    <!-- SCHERM 8: REALTIME COMPOSIETKAMER & SIGNALEMENT -->
+    <!-- SCHERM 8: REALTIME COMPOSIETKAMER & INGEBOUWDE PORTOFOON -->
     <div id="screen-8" class="screen">
         <div class="composiet-grid">
             <div class="comp-left">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <strong style="color: var(--primary); font-size: 0.95em;"><i class="fa-solid fa-users"></i> Duo Selectie:</strong>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <strong style="color: var(--primary); font-size: 0.9em;"><i class="fa-solid fa-users"></i> Duo Kanaal:</strong>
                     <select id="teamRoomSelect" onchange="switchRoom()" style="padding: 4px 8px; border-radius: 4px; font-weight: bold;">
                         <option value="Duo-1">Duo 1</option>
                         <option value="Duo-2">Duo 2</option>
@@ -634,32 +717,45 @@
                     </select>
                 </div>
 
-                <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+                <div style="display: flex; gap: 6px; margin-bottom: 8px;">
                     <button id="btnRoleGetuige" onclick="setRole('getuige')" style="flex:1; padding: 6px; border: 1px solid #90caf9; border-radius: 4px; font-size: 0.75em; cursor: pointer; font-weight: bold;">👀 Ooggetuige</button>
                     <button id="btnRoleRechercheur" onclick="setRole('rechercheur')" style="flex:1; padding: 6px; border: 1px solid #a5d6a7; border-radius: 4px; font-size: 0.75em; cursor: pointer; font-weight: bold;">🎨 Compositeur</button>
                 </div>
 
                 <div id="roleBadgeContainer"></div>
 
-                <div style="background: #fff8e1; border-left: 3px solid #ffb300; padding: 6px 10px; font-size: 0.75em; margin-bottom: 8px;">
-                    <strong>Regels:</strong> Schrijf in <strong>OVT</strong>. Begin bij geslacht en kaak/gezicht, dán ogen/neus/mond, dán pas haar en accessoires.
+                <!-- TACTISCHE INGEBOUWDE TETRA PORTOFOON -->
+                <div class="walkie-talkie">
+                    <div class="radio-lcd" id="radioLcd">
+                        <span id="radioChannelName">CH-01 [DUO-1]</span>
+                        <span id="radioStatusText">STANDBY 🟢</span>
+                    </div>
+
+                    <button class="ptt-button" id="pttBtn">
+                        <i class="fa-solid fa-microphone"></i> Houd vast om te zenden (PTT)
+                    </button>
+                    <div class="radio-traffic-log" id="radioLog">Radiokanaal gereed voor verbinding.</div>
                 </div>
 
-                <label style="font-size: 0.75em; font-weight: bold; margin-bottom: 3px;">Signalement Tekst (Realtime):</label>
-                <textarea id="liveSignalementIn" rows="7" 
-                    placeholder="Typ hier in OVT: De verdachte betrof een man van circa 30 jaar. Hij had een vierkante kaak en diepliggende ogen..."
-                    style="width: 100%; padding: 8px; border: 2px solid #b0bec5; border-radius: 4px; font-size: 0.8em; resize: none;"
+                <div style="background: #fff8e1; border-left: 3px solid #ffb300; padding: 6px 8px; font-size: 0.72em; margin-top: 8px;">
+                    <strong>Opdracht:</strong> Werk fysiek op afstand in het gebouw! Communiceer via de porto in <strong>OVT</strong>.
+                </div>
+
+                <label style="font-size: 0.75em; font-weight: bold; margin-top: 6px; margin-bottom: 2px;">Signalement Tekst (Live Protocol):</label>
+                <textarea id="liveSignalementIn" rows="4" 
+                    placeholder="Typ of dicteer in OVT: De verdachte betrof een man van circa 30 jaar..."
+                    style="width: 100%; padding: 6px; border: 2px solid #b0bec5; border-radius: 4px; font-size: 0.8em; resize: none;"
                     oninput="syncSignalementText(this.value)"></textarea>
 
-                <div style="background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 6px; padding: 8px; margin-top: 10px;">
-                    <strong style="font-size: 0.8em; color: var(--primary);"><i class="fa-solid fa-clipboard-check"></i> Peer-Audit door Partner:</strong>
-                    <div style="font-size: 0.75em; margin: 6px 0; display: flex; flex-direction: column; gap: 3px;">
-                        <label><input type="checkbox" id="chkAuditOVT" onchange="syncAudit()"> Volledig OVT (Geen VVT)</label>
+                <div style="background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 6px; padding: 6px; margin-top: 6px;">
+                    <strong style="font-size: 0.75em; color: var(--primary);"><i class="fa-solid fa-clipboard-check"></i> Peer-Audit (Partner controle):</strong>
+                    <div style="font-size: 0.72em; margin: 4px 0; display: flex; flex-direction: column; gap: 2px;">
+                        <label><input type="checkbox" id="chkAuditOVT" onchange="syncAudit()"> 100% OVT (Geen VVT)</label>
                         <label><input type="checkbox" id="chkAuditVolgorde" onchange="syncAudit()"> Van boven naar beneden</label>
-                        <label><input type="checkbox" id="chkAuditDetail" onchange="syncAudit()"> Vaste kenmerken duidelijk</label>
+                        <label><input type="checkbox" id="chkAuditDetail" onchange="syncAudit()"> Duidelijke vaste kenmerken</label>
                     </div>
-                    <input type="text" id="auditNotes" placeholder="Tip/Top feedback voor je partner..." 
-                        style="width: 100%; font-size: 0.75em; padding: 4px;" oninput="syncAudit()">
+                    <input type="text" id="auditNotes" placeholder="Feedback aan je porto-partner..." 
+                        style="width: 100%; font-size: 0.72em; padding: 3px;" oninput="syncAudit()">
                 </div>
             </div>
 
@@ -684,7 +780,7 @@
                     </div>
                 </div>
 
-                <div style="margin-top: 10px; display: flex; gap: 8px;">
+                <div style="margin-top: 8px; display: flex; gap: 8px;">
                     <button onclick="resetComposite()" style="background:#90a4ae; color:white; border:none; padding:7px 12px; border-radius:4px; font-weight:bold; cursor:pointer; font-size:0.75em;"><i class="fa-solid fa-rotate-left"></i> Reset</button>
                     <button onclick="exportSignalement()" style="background:var(--ovt-green); color:white; border:none; padding:7px 14px; border-radius:4px; font-weight:bold; cursor:pointer; font-size:0.75em;"><i class="fa-solid fa-cloud-arrow-up"></i> Zend naar Korpsfeed</button>
                 </div>
@@ -738,6 +834,151 @@
         let dragSid = null;
         let dragLid = null;
         let dragOffset = { x: 0, y: 0 };
+
+        /* ================= PORTOFOON AUDIO & PTT ENGINE ================= */
+        const radioAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let isTransmitting = false;
+
+        // TETRA Portofoon tonen (start chirp, end roger-beep, squelch noise)
+        function playTetraStartTone() {
+            if (radioAudioCtx.state === 'suspended') radioAudioCtx.resume();
+            const now = radioAudioCtx.currentTime;
+            [900, 1200, 1500].forEach((freq, idx) => {
+                const osc = radioAudioCtx.createOscillator();
+                const gain = radioAudioCtx.createGain();
+                osc.type = "sine";
+                osc.frequency.setValueAtTime(freq, now + idx * 0.035);
+                gain.gain.setValueAtTime(0.08, now + idx * 0.035);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + (idx + 1) * 0.035);
+                osc.connect(gain);
+                gain.connect(radioAudioCtx.destination);
+                osc.start(now + idx * 0.035);
+                osc.stop(now + (idx + 1) * 0.035);
+            });
+        }
+
+        function playTetraEndTone() {
+            if (radioAudioCtx.state === 'suspended') radioAudioCtx.resume();
+            const now = radioAudioCtx.currentTime;
+            [1200, 850].forEach((freq, idx) => {
+                const osc = radioAudioCtx.createOscillator();
+                const gain = radioAudioCtx.createGain();
+                osc.type = "sine";
+                osc.frequency.setValueAtTime(freq, now + idx * 0.05);
+                gain.gain.setValueAtTime(0.07, now + idx * 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + (idx + 1) * 0.05);
+                osc.connect(gain);
+                gain.connect(radioAudioCtx.destination);
+                osc.start(now + idx * 0.05);
+                osc.stop(now + (idx + 1) * 0.05);
+            });
+        }
+
+        function playStaticBurst() {
+            try {
+                if (radioAudioCtx.state === 'suspended') radioAudioCtx.resume();
+                const bufferSize = radioAudioCtx.sampleRate * 0.09;
+                const buffer = radioAudioCtx.createBuffer(1, bufferSize, radioAudioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+                const noise = radioAudioCtx.createBufferSource();
+                noise.buffer = buffer;
+                const filter = radioAudioCtx.createBiquadFilter();
+                filter.type = "bandpass";
+                filter.frequency.value = 1600;
+                filter.Q.value = 3;
+
+                const gain = radioAudioCtx.createGain();
+                gain.gain.setValueAtTime(0.06, radioAudioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, radioAudioCtx.currentTime + 0.09);
+
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(radioAudioCtx.destination);
+                noise.start();
+            } catch(e) {}
+        }
+
+        // PTT Event Handlers
+        const pttBtn = document.getElementById('pttBtn');
+
+        async function startTransmitting() {
+            if (isTransmitting) return;
+            try {
+                playTetraStartTone();
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+                mediaRecorder.onstop = uploadRadioMessage;
+
+                mediaRecorder.start();
+                isTransmitting = true;
+
+                document.getElementById('radioLcd').className = "radio-lcd transmitting";
+                document.getElementById('radioStatusText').innerText = "ZENDEN... 🔴";
+                pttBtn.classList.add('active');
+            } catch(err) {
+                alert("Microfoontoegang vereist voor de portofoon! Controleer je browserinstellingen.");
+            }
+        }
+
+        function stopTransmitting() {
+            if (!isTransmitting || !mediaRecorder) return;
+            isTransmitting = false;
+            playTetraEndTone();
+
+            document.getElementById('radioLcd').className = "radio-lcd";
+            document.getElementById('radioStatusText').innerText = "STANDBY 🟢";
+            pttBtn.classList.remove('active');
+
+            if (mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(t => t.stop());
+            }
+        }
+
+        pttBtn.addEventListener('mousedown', startTransmitting);
+        pttBtn.addEventListener('mouseup', stopTransmitting);
+        pttBtn.addEventListener('mouseleave', stopTransmitting);
+        pttBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startTransmitting(); });
+        pttBtn.addEventListener('touchend', (e) => { e.preventDefault(); stopTransmitting(); });
+
+        function uploadRadioMessage() {
+            const blob = new Blob(audioChunks, { type: 'audio/webm' });
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+                const base64Audio = reader.result;
+                update(ref(db, `classes/${window.currentClass}/rooms/${window.currentRoom}/radio`), {
+                    senderRole: window.userRole,
+                    senderName: window.userName,
+                    audio: base64Audio,
+                    timestamp: Date.now()
+                });
+                document.getElementById('radioLog').innerText = `Bericht verzonden om ${new Date().toLocaleTimeString()}`;
+            };
+        }
+
+        function playIncomingRadio(data) {
+            playStaticBurst();
+            document.getElementById('radioLcd').className = "radio-lcd receiving";
+            document.getElementById('radioStatusText').innerText = "ONTVANGEN... 📻";
+            document.getElementById('radioLog').innerText = `Inkomend bericht van ${data.senderName} (${data.senderRole})`;
+
+            const audio = new Audio(data.audio);
+            audio.onended = () => {
+                playTetraEndTone();
+                playStaticBurst();
+                document.getElementById('radioLcd').className = "radio-lcd";
+                document.getElementById('radioStatusText').innerText = "STANDBY 🟢";
+            };
+            audio.play().catch(e => console.log("Audio play error", e));
+        }
 
         /* ================= COMPOSIET MODELLEN ================= */
         const compositeState = {
@@ -793,7 +1034,7 @@
             ]
         };
 
-        /* ================= DE 48 WOORDENSCHAT WOORDEN VOOR PACMAN ================= */
+        /* ================= 48 PACMAN WOORDEN ================= */
         const PACMAN_VOCABULARY = [
             { word: "determineren", def: "bepalen, vaststellen op grond van bepaalde kenmerken" },
             { word: "souterrain", def: "ruimte van een woning die gedeeltelijk beneden straatniveau ligt" },
@@ -845,7 +1086,7 @@
             { word: "satirische", def: "op geestige wijze kritiek leverend" }
         ];
 
-        /* ================= NAVIGATIE & INLOGGEN ================= */
+        /* ================= INLOGGEN & NAVIGATIE ================= */
         window.login = () => {
             const klas = document.getElementById('classSelect').value;
             const naam = document.getElementById('studentName').value.trim();
@@ -1001,7 +1242,7 @@
             c.height = c.parentElement.clientHeight;
         }
 
-        /* ================= COMPOSIETKAMER (SCHERM 8) ================= */
+        /* ================= COMPOSIETKAMER & ROLTOEWIJZING ================= */
         function renderComposite() {
             const skin = COMPOSITE_PARTS.skin.find(s => s.id === compositeState.skin);
             
@@ -1057,13 +1298,13 @@
             const deck = document.querySelector('.comp-right');
 
             if(role === 'getuige') {
-                badge.innerHTML = `<div class="role-pill" style="background:#ffe0b2; color:#e65100; border:1px solid #ffb74d;">Jouw rol: 👀 Ooggetuige (Schrijver)</div>`;
+                badge.innerHTML = `<div class="role-pill" style="background:#ffe0b2; color:#e65100; border:1px solid #ffb74d;">👀 Rol: Ooggetuige (Blijf bij het Plaats Delict)</div>`;
                 txt.removeAttribute('readonly');
                 txt.style.background = '#ffffff';
-                deck.style.opacity = '0.4';
+                deck.style.opacity = '0.35';
                 deck.style.pointerEvents = 'none';
             } else {
-                badge.innerHTML = `<div class="role-pill" style="background:#c8e6c9; color:#1b5e20; border:1px solid #81c784;">Jouw rol: 🎨 Compositeur (Tekenaar)</div>`;
+                badge.innerHTML = `<div class="role-pill" style="background:#c8e6c9; color:#1b5e20; border:1px solid #81c784;">🎨 Rol: Compositeur (Zoek een andere ruimte!)</div>`;
                 txt.setAttribute('readonly', 'true');
                 txt.style.background = '#f1f3f4';
                 deck.style.opacity = '1';
@@ -1089,8 +1330,11 @@
 
         window.switchRoom = () => {
             window.currentRoom = document.getElementById('teamRoomSelect').value;
+            document.getElementById('radioChannelName').innerText = `CH-01 [${window.currentRoom}]`;
             setupRoomListener();
         };
+
+        let lastRadioTimestamp = 0;
 
         function setupRoomListener() {
             onValue(ref(db, `classes/${window.currentClass}/rooms/${window.currentRoom}`), (snap) => {
@@ -1112,6 +1356,14 @@
                     document.getElementById('chkAuditDetail').checked = !!data.audit.detail;
                     if(document.activeElement !== document.getElementById('auditNotes')) {
                         document.getElementById('auditNotes').value = data.audit.notes || "";
+                    }
+                }
+
+                // Inkomend radiobericht detectie
+                if (data.radio && data.radio.timestamp > lastRadioTimestamp) {
+                    lastRadioTimestamp = data.radio.timestamp;
+                    if (data.radio.senderRole !== window.userRole) {
+                        playIncomingRadio(data.radio);
                     }
                 }
             });
@@ -1141,7 +1393,7 @@
             alert("Dossier ingezonden naar de plenaire Korpsfeed!");
         };
 
-        /* ================= PACMAN LOGICA (SCHERM 7) ================= */
+        /* ================= PACMAN SPEL LOGICA ================= */
         const P_COLS = 25, P_ROWS = 30, P_TILE = 22;
         let pMap = [], pTotalDots = 0, pScore = 0, pLevel = 1, pLives = 3;
         let pGameRunning = false, pTurboTimer = 0, pFlash = false;
@@ -1449,7 +1701,6 @@
                 pCompleted.delete(idx);
             }
 
-            // Streep door in 10-woordenlijst
             const typed = new Set();
             pCompleted.forEach(i => typed.add(norm(pCurrentTargets[i].word)));
             pCurrentTen.forEach(w => {
