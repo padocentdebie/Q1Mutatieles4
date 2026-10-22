@@ -466,13 +466,24 @@
             text-align: center;
         }
 
+        /* INGEBOUWD OOGGETUIGE DADERDOSSIER */
+        #witnessDossierContainer {
+            background: #fff8e1;
+            border: 2px solid #ffb300;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
         /* PORTOFOON INTERFACE */
         .walkie-talkie {
             background: var(--radio-dark);
             border: 3px solid #2d3748;
             border-radius: 12px;
             padding: 10px;
-            margin-top: 10px;
+            margin-top: 6px;
             box-shadow: inset 0 0 10px #000;
             color: #fff;
             position: relative;
@@ -708,12 +719,20 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                     <strong style="color: var(--primary); font-size: 0.9em;"><i class="fa-solid fa-users"></i> Duo Kanaal:</strong>
                     <select id="teamRoomSelect" onchange="switchRoom()" style="padding: 4px 8px; border-radius: 4px; font-weight: bold;">
-                        <option value="Duo-1">Duo 1</option>
-                        <option value="Duo-2">Duo 2</option>
-                        <option value="Duo-3">Duo 3</option>
-                        <option value="Duo-4">Duo 4</option>
-                        <option value="Duo-5">Duo 5</option>
-                        <option value="Duo-6">Duo 6</option>
+                        <!-- DUO 1 T/M 25 KOPPELT AUTOMATISCH AAN DOSSIER 1 T/M 25 -->
+                        <option value="Duo-1">Duo 1</option><option value="Duo-2">Duo 2</option>
+                        <option value="Duo-3">Duo 3</option><option value="Duo-4">Duo 4</option>
+                        <option value="Duo-5">Duo 5</option><option value="Duo-6">Duo 6</option>
+                        <option value="Duo-7">Duo 7</option><option value="Duo-8">Duo 8</option>
+                        <option value="Duo-9">Duo 9</option><option value="Duo-10">Duo 10</option>
+                        <option value="Duo-11">Duo 11</option><option value="Duo-12">Duo 12</option>
+                        <option value="Duo-13">Duo 13</option><option value="Duo-14">Duo 14</option>
+                        <option value="Duo-15">Duo 15</option><option value="Duo-16">Duo 16</option>
+                        <option value="Duo-17">Duo 17</option><option value="Duo-18">Duo 18</option>
+                        <option value="Duo-19">Duo 19</option><option value="Duo-20">Duo 20</option>
+                        <option value="Duo-21">Duo 21</option><option value="Duo-22">Duo 22</option>
+                        <option value="Duo-23">Duo 23</option><option value="Duo-24">Duo 24</option>
+                        <option value="Duo-25">Duo 25</option>
                     </select>
                 </div>
 
@@ -723,6 +742,21 @@
                 </div>
 
                 <div id="roleBadgeContainer"></div>
+
+                <!-- DIT DOSSIER IS ALLEEN ZICHTBAAR VOOR DE OOGGETUIGE -->
+                <div id="witnessDossierContainer" style="display:none;">
+                    <div style="font-size:0.75em; font-weight:bold; color:#b78103; text-transform:uppercase; margin-bottom:4px; display:flex; justify-content:space-between;">
+                        <span><i class="fa-solid fa-file-shield"></i> Daderdossier (Getuige)</span>
+                        <span id="dossierNumLabel">Dossier #01</span>
+                    </div>
+                    <div style="display:flex; gap:10px; align-items:flex-start;">
+                        <div id="dossierSvgWrap"></div>
+                        <div style="flex:1;">
+                            <div id="dossierTitle" style="font-size:0.78em; font-weight:bold; color:#1c2b4b; margin-bottom:4px;"></div>
+                            <div style="font-size:0.72em; color:#222; line-height:1.35; max-height:120px; overflow-y:auto; background:#ffffff; padding:6px; border-radius:4px; border:1px solid #ffe082;" id="dossierText"></div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- TACTISCHE INGEBOUWDE TETRA PORTOFOON -->
                 <div class="walkie-talkie">
@@ -846,7 +880,6 @@
         let currentRoomUnsub = null;
         let lastRadioTimestamp = Date.now();
 
-        // Browser-brede MIME type ondersteuning (Chrome, Safari, iOS, Firefox)
         function getOptimalMimeType() {
             const types = [
                 'audio/webm;codecs=opus',
@@ -863,7 +896,6 @@
             return '';
         }
 
-        // Directe microfoon initialisatie zonder vertraging
         async function getMicrophoneStream() {
             if (micStream && micStream.active) return micStream;
             micStream = await navigator.mediaDevices.getUserMedia({
@@ -876,7 +908,6 @@
             return micStream;
         }
 
-        // TETRA Portofoon tonen
         function playTetraStartTone() {
             if (radioAudioCtx.state === 'suspended') radioAudioCtx.resume();
             const now = radioAudioCtx.currentTime;
@@ -937,7 +968,6 @@
             } catch(e) {}
         }
 
-        // PTT Event Handlers via Pointer Events (werkt 100% vlekkeloos op desktop en touchscreen)
         const pttBtn = document.getElementById('pttBtn');
 
         async function startTransmitting() {
@@ -977,7 +1007,6 @@
                 document.getElementById('radioLog').innerText = "Verbinding open. Spreek nu...";
                 pttBtn.classList.add('active');
 
-                // Veiligheidstime-out (max 20 sec zenden)
                 clearTimeout(pttTimeout);
                 pttTimeout = setTimeout(() => {
                     if (isTransmitting) stopTransmitting();
@@ -1013,7 +1042,6 @@
             }
         }
 
-        // Pointer event binding met PointerCapture zodat loslaten altijd geregistreerd wordt
         pttBtn.addEventListener('pointerdown', (e) => {
             e.preventDefault();
             try { pttBtn.setPointerCapture(e.pointerId); } catch(err){}
@@ -1034,7 +1062,6 @@
             const mime = getOptimalMimeType() || 'audio/webm';
             const blob = new Blob(audioChunks, { type: mime });
 
-            // Te korte klik negeren
             if (blob.size < 600) {
                 document.getElementById('radioLog').innerText = "Bericht te kort, niet verzonden.";
                 return;
@@ -1137,6 +1164,72 @@
             ]
         };
 
+        /* ================= DE 25 OFFICIËLE INGEBOUWDE DADERDOSSIERS ================= */
+        const DOSSIERS_25 = [
+            { id: 1, title: "Woninginbraak Stationskwartier", cfg: { skin:'light', head:'oval', eyes:'almond', nose:'straight', mouth:'neutral', hair:'short', beard:'stubble', details:'glasses' }, text: "De getuige zag een man van circa 25 tot 30 jaar oud met een slank postuur en een lichte, bleke huidskleur. Hij had een regelmatig ovaal gezicht met amandelvormige ogen en een rechte, smalle neus. Zijn lippen stonden neutraal. De man had donker, kort opgeschoren haar en duidelijke zwarte baardstoppels op zijn wangen. Opvallend was zijn zwarte rechthoekige bril. Hij droeg een donkerblauwe hoodie en rende hard weg in de richting van perron 2." },
+            { id: 2, title: "Straatroof Singelpark", cfg: { skin:'tinted', head:'square', eyes:'deep', nose:'hook', mouth:'down', hair:'bald', beard:'fullbeard', details:'none' }, text: "De getuige verklaarde dat de dader een man van ongeveer 35 jaar betrof met een getinte, olijfkleurige huid en een breed postuur. Zijn gezicht toonde een zeer hoekige, brede kaaklijn. Hij keek nors met diepliggende, fronsende ogen en had een markante haakneus met een knik. Zijn mondhoeken stonden strak omlaag. De man was volledig kaal en droeg een volle, donkere baard. Bijzondere littekens ontbraken. Hij stapte haastig op een zwarte fatbike en verdween richting het stadscentrum." },
+            { id: 3, title: "Zakkenrollerij Marktplein", cfg: { skin:'dark', head:'round', eyes:'wide', nose:'wide_nose', mouth:'full', hair:'cap', beard:'goatee', details:'tattoo' }, text: "Volgens de aangever ging het om een man van circa 22 jaar oud met een donkerbruine huidskleur en een tenger postuur. Hij bezat een opvallend rond, bol gezicht met grote, alerte kijkers en een brede neus. Zijn lippen waren vol. Op zijn hoofd droeg hij een zwarte baseballpet met de klep naar voren. Op zijn kin prijkte een verzorgde sik met snor. Aan de linkerzijde van zijn hals zag de getuige een groenige tatoeage. Hij liep met versnelde pas weg tussen het winkelend publiek." },
+            { id: 4, title: "Winkeldiefstal Drogisterij", cfg: { skin:'deep_dark', head:'triangle', eyes:'almond', nose:'straight', mouth:'neutral', hair:'short', beard:'none', details:'scar' }, text: "De beveiliger zag een man van naar schatting 28 jaar met een zeer donkere, diepzwarte huidskleur en een atletische bouw. Zijn gezichtsvorm liep spits toe naar een scherpe kin. Hij had amandelvormige ogen, een rechte neus en neutrale lippen. Zijn haar was kort gemillimeterd en zijn gezicht was gladgeschoren. Over zijn rechterwang liep een opvallend recht litteken. De verdachte droeg een felrood trainingsjack en vluchtte te voet de parkeergarage in." },
+            { id: 5, title: "Poging Overval Tankstation", cfg: { skin:'light', head:'square', eyes:'deep', nose:'straight', mouth:'down', hair:'wavy', beard:'fullbeard', details:'glasses' }, text: "De caissière omschreef de man als ongeveer 45 jaar oud, zwaar gebouwd met een lichte huidskleur. Hij bezat een robuuste, vierkante kaak en keek boos uit diepliggende ogen. Zijn neus was recht en zijn lippen sloten strak op elkaar. Hij had halflang, donker golvend haar tot over zijn oren en een zware, dichte baard. De dader droeg een hoekige bril en een versleten legergroene jas. Hij verliet het tankstation rennend in noordelijke richting." },
+            { id: 6, title: "Autokraak Industrieterrein", cfg: { skin:'tinted', head:'oval', eyes:'wide', nose:'wide_nose', mouth:'neutral', hair:'short', beard:'goatee', details:'scar' }, text: "De melder zag een man van circa 30 jaar met een getint uiterlijk en een gemiddelde lengte. Zijn hoofd had een klassieke ovale vorm. Hij sperde zijn grote, alerte ogen wijd open en had een brede wipneus. Zijn mondhoeken stonden neutraal. Hij had kort zwart haar en een scherp getrimde sik met snor. Op zijn linkerjukbeen viel een klein litteken op. De verdachte gooide een schroevendraaier op de grond en sprintte een donkere steeg in." },
+            { id: 7, title: "Mishandeling Uitgaansgebied", cfg: { skin:'dark', head:'triangle', eyes:'almond', nose:'hook', mouth:'full', hair:'bald', beard:'stubble', details:'none' }, text: "De portier verklaarde dat de agressor een man van omstreeks 26 jaar betrof met een donkerbruine huidskleur en een gespierde nek. Zijn gezicht was smal met een scherpe, puntige kin. Hij keek met amandelvormige ogen en had een duidelijke haakneus. Zijn lippen waren vol van vorm. Hij was volledig kaal en vertoonde lichte baardstoppels rond de kaaklijn. Hij had geen zichtbare littekens of sieraden. De man rende direct weg na de schermutseling." },
+            { id: 8, title: "Fietsendiefstal Centraal Station", cfg: { skin:'light', head:'round', eyes:'wide', nose:'straight', mouth:'down', hair:'cap', beard:'none', details:'tattoo' }, text: "Een getuige zag een jongeman van circa 20 jaar met een lichte huid en een mollig postuur. Zijn gelaat was opvallend rond en bol. Hij had grote, alerte blauwe ogen, een rechte smalle neus en dunne, strak op elkaar gedrukte lippen. Zijn hoofd schuilde onder een zwarte baseballpet en zijn wangen waren gladgeschoren. Laag in zijn hals ontwaarde de getuige een grillige donkere tatoeage. De jongeman fietste met hoge snelheid weg op een gestolen e-bike." },
+            { id: 9, title: "Pinpasfraude Winkelcentrum", cfg: { skin:'deep_dark', head:'square', eyes:'deep', nose:'wide_nose', mouth:'full', hair:'short', beard:'fullbeard', details:'none' }, text: "Het slachtoffer sprak over een man van circa 40 jaar met een diep donkere huidskleur en een fors voorkomen. Zijn gezicht kenmerkte zich door een brede, vierkante kaaklijn. Hij had diepliggende ogen onder zware wenkbrauwen, een brede neus en volle lippen. Zijn haar was zeer kort geknipt en hij droeg een volle, donkere baard die overging in zijn bakkebaarden. Hij droeg een nette donkergrijze mantel en liep rustig weg in de richting van de tramhalte." },
+            { id: 10, title: "Vernieling Bushokje", cfg: { skin:'tinted', head:'triangle', eyes:'almond', nose:'straight', mouth:'neutral', hair:'wavy', beard:'none', details:'glasses' }, text: "Een omwonende zag een jongeman van rond de 19 jaar met een getinte huidskleur en een tenger lijf. Zijn gezicht liep driehoekig en spits af naar zijn kin. Hij bezat amandelvormige ogen, een rechte neus en een neutrale mondstand. Hij had een flinke bos donker, halflang golvend haar dat op zijn voorhoofd viel. Op zijn neus rustte een zwarte rechthoekige bril. De dader schopte tegen het glas en zette het daarna op een lopen door het park." },
+            { id: 11, title: "Bedreiging Horecaplein", cfg: { skin:'light', head:'oval', eyes:'deep', nose:'hook', mouth:'down', hair:'bald', beard:'goatee', details:'scar' }, text: "De ober verklaarde dat de verdachte een man van circa 38 jaar betrof met een lichte gelaatskleur en een pezig postuur. Zijn gezicht was ovaal van vorm. Hij keek intimiderend uit diepliggende ogen en had een geprononceerde haakneus. Zijn lippen stonden strak en verbitterd naar beneden gericht. Hij had een kaalgeschoren hoofd en een puntige zwarte sik met snor. Een opvallend litteken sierde zijn rechterwang. Hij beende woedend weg in de richting van de gracht." },
+            { id: 12, title: "Inbraak Bedrijfspand", cfg: { skin:'dark', head:'square', eyes:'wide', nose:'straight', mouth:'neutral', hair:'short', beard:'stubble', details:'glasses' }, text: "De surveillant trof een man van ongeveer 32 jaar met een donkerbruine huid en brede schouders. Zijn kaaklijn was vierkant en markant. Hij had grote, alerte ogen, een rechte neus en neutrale lippen. Zijn zwarte haar was kort opgeschoren en hij had duidelijke stoppelbaardgroei. Hij droeg een zwarte rechthoekige bril en donkere werkkleding. De insluiper klom over een hekwerk en verdween in het struikgewas." },
+            { id: 13, title: "Babbeltruc Seniorenflat", cfg: { skin:'deep_dark', head:'round', eyes:'almond', nose:'wide_nose', mouth:'full', hair:'cap', beard:'none', details:'none' }, text: "De bewoonster omschreef de verdachte als een vriendelijk ogende man van circa 24 jaar met een diep donkere huidskleur en een gemiddeld postuur. Zijn gezicht was volkomen rond. Hij had zachtmoedige, amandelvormige ogen, een brede neus en volle lippen. Hij droeg een donkere baseballpet op zijn hoofd en was volkomen gladgeschoren zonder littekens. Hij hield een klembord vast en liep via het trappenhuis rustig naar de uitgang." },
+            { id: 14, title: "Straatintimidatie Metrostation", cfg: { skin:'tinted', head:'oval', eyes:'deep', nose:'straight', mouth:'down', hair:'short', beard:'fullbeard', details:'tattoo' }, text: "Het slachtoffer meldde een man van omstreeks 30 jaar met een getinte huidskleur en een slank postuur. Zijn gezicht had een ovale basis. Hij keek ernstig met diepliggende ogen en had een rechte neus. Zijn mondhoeken bogen strak omlaag. Hij had kort zwart stekelhaar en een goed onderhouden, volle baard. Aan de zijkant van zijn hals was een donkere tatoeage zichtbaar. Hij schold luidkeels en stapte daarna in de gereedstaande metro richting Noord." },
+            { id: 15, title: "Diefstal Bouwplaats", cfg: { skin:'light', head:'triangle', eyes:'almond', nose:'straight', mouth:'full', hair:'wavy', beard:'stubble', details:'scar' }, text: "De opzichter zag een man van naar schatting 27 jaar met een lichte huidskleur en een pezig postuur. Zijn gezicht eindigde in een scherpe, spitse kin. Hij had amandelvormige ogen, een rechte neus en volle lippen. Zijn halflange bruine haar golfde tot over zijn oren. Op zijn wangen zaten donkere stoppels en op zijn rechterwang zat een vers snij-litteken. Hij laadde koperkabels in een bestelbus en reed met slippende banden weg." },
+            { id: 16, title: "Zakkenrollerij Festivalterrein", cfg: { skin:'dark', head:'oval', eyes:'deep', nose:'hook', mouth:'neutral', hair:'bald', beard:'none', details:'glasses' }, text: "Een festivalbezoeker zag een man van circa 42 jaar met een donkerbruine huidskleur en een mager postuur. Hij bezat een ovaal gelaat met diepliggende, loerende ogen en een scherpe haakneus. Zijn lippen stonden neutraal gesloten. De man had een kaal hoofd en was volledig gladgeschoren. Hij droeg een zwarte, rechthoekige bril op sterkte. Hij manoeuvreerde handig door de mensenmassa en verdween tussen de feestgangers." },
+            { id: 17, title: "Oplichting Juwelier", cfg: { skin:'deep_dark', head:'triangle', eyes:'wide', nose:'straight', mouth:'neutral', hair:'short', beard:'goatee', details:'none' }, text: "De winkelier sprak van een man van rond de 35 jaar met een diep donkere huidskleur en een verzorgde uitstraling. Zijn gezicht liep smal en spits toe. Hij had grote, alerte ogen, een rechte smalle neus en neutrale lippen. Zijn haar was netjes kort opgeschoren en hij had een verzorgde sik met een dunne snor. Hij vertoonde geen littekens of tatoeages. Hij toonde een valse bankpas en wandelde snel de juwelierszaak uit." },
+            { id: 18, title: "Beroving Parkeerplaats", cfg: { skin:'light', head:'square', eyes:'wide', nose:'wide_nose', mouth:'down', hair:'cap', beard:'stubble', details:'scar' }, text: "De aangeefster verklaarde dat de dader een man van circa 29 jaar betrof met een lichte huidskleur en een zwaar postuur. Zijn gezicht was breed en hoekig. Hij keek met grote, opengesperde ogen en had een brede neus. Zijn mond stond strak naar beneden. Op zijn hoofd droeg hij een zwarte baseballpet. Hij had een donkere stoppelbaard en een zichtbaar litteken op zijn linkerwang. Hij griste een handtas mee en sprintte over de parkeerplaats weg." },
+            { id: 19, title: "Vals geld Horecazaak", cfg: { skin:'tinted', head:'round', eyes:'almond', nose:'straight', mouth:'full', hair:'bald', beard:'fullbeard', details:'glasses' }, text: "De barman herkende de klant als een man van omstreeks 36 jaar met een getinte huid en een gezette bouw. Hij had een rond, vriendelijk gezicht met amandelvormige ogen en een rechte neus. Zijn lippen waren vol van vorm. De verdachte was kaal en had een donkere, volle baard. Hij droeg een moderne rechthoekige bril met een donker montuur. Na het betalen met een vals biljet van vijftig euro verliet hij haastig het terras." },
+            { id: 20, title: "Grafitti Monumentaal Pand", cfg: { skin:'dark', head:'triangle', eyes:'deep', nose:'straight', mouth:'down', hair:'wavy', beard:'none', details:'tattoo' }, text: "Een getuige zag een jongeman van rond de 21 jaar met een donkerbruine huid en een slungelig postuur. Zijn gezicht had een spitse kin. Hij tuurde met diepliggende ogen en had een rechte neus. Zijn mondhoeken stonden strak en gespannen. Hij had een flinke bos golvend haar tot in zijn nek en was gladgeschoren. Aan de rechterkant van zijn hals zat een opvallende tatoeage. Hij liet een spuitbus vallen en vluchtte op een skateboard weg." },
+            { id: 21, title: "Winkeldiefstal Elektronicazaak", cfg: { skin:'deep_dark', head:'oval', eyes:'deep', nose:'hook', mouth:'full', hair:'short', beard:'stubble', details:'none' }, text: "De verkoper omschreef de verdachte als een man van circa 31 jaar met een diep donkere huid en een gespierde bouw. Zijn gezicht was ovaal van vorm. Hij had diepliggende, wantrouwige ogen en een haakneus met een knik. Zijn lippen waren vol en gesloten. Hij had kort donker haar en een lichte stoppelbaard op zijn wangen en kin. Er waren geen littekens of sieraden te zien. Hij rende met twee laptops onder zijn arm de nooduitgang uit." },
+            { id: 22, title: "Poging Inbraak Schoolgebouw", cfg: { skin:'light', head:'round', eyes:'almond', nose:'hook', mouth:'neutral', hair:'wavy', beard:'goatee', details:'none' }, text: "De conciërge zag een man van ongeveer 28 jaar met een lichte huidskleur en een gemiddeld postuur. Zijn gezicht was bol en rond van vorm. Hij had amandelvormige ogen, een scherpe haakneus en neutrale lippen. Hij droeg halflang golvend haar dat onder zijn capuchon vandaan kwam, en had een sikje met een snor. Hij vertoonde geen bijzondere littekens. Toen het alarm afging, liet hij zijn breekijzer vallen en klom over het schoolpleinhek." },
+            { id: 23, title: "Straatoverlast Speeltuin", cfg: { skin:'tinted', head:'square', eyes:'wide', nose:'wide_nose', mouth:'neutral', hair:'cap', beard:'none', details:'scar' }, text: "Een buurtbewoner zag een man van circa 23 jaar met een getinte huid en een breedgeschouderd postuur. Zijn gezicht was opvallend vierkant en stevig van bouw. Hij had grote, alerte ogen, een brede neus en een neutrale mondstand. Hij droeg een zwarte baseballpet op zijn hoofd en was gladgeschoren. Op zijn linkerwang zat een horizontaal litteken van enkele centimeters lang. Hij trapte tegen een prullenbak en fietste hard weg." },
+            { id: 24, title: "Diefstal Lading Vrachtwagen", cfg: { skin:'dark', head:'round', eyes:'almond', nose:'straight', mouth:'down', hair:'short', beard:'fullbeard', details:'glasses' }, text: "De chauffeur trof een man aan van rond de 46 jaar met een donkerbruine huidskleur en een zwaar, gezet postuur. Zijn gezicht was vol en rond. Hij had amandelvormige ogen en een rechte neus, met strak naar beneden getrokken mondhoeken. Zijn haar was kort geknipt en hij droeg een zware volle baard. Op zijn neus stond een rechthoekige bril met een donker montuur. Hij liet een doos vallen en vluchtte in een gereedstaande witte bestelbus." },
+            { id: 25, title: "Bedreiging Beveiliger Ziekenhuis", cfg: { skin:'deep_dark', head:'square', eyes:'deep', nose:'straight', mouth:'neutral', hair:'bald', beard:'stubble', details:'tattoo' }, text: "De ziekenhuisbeveiliger verklaarde dat de man ongeveer 34 jaar oud was, lang en gespierd met een diep donkere huidskleur. Hij bezat een hoekige, brede kaaklijn. Hij keek fel uit diepliggende ogen en had een rechte neus. Zijn mond stond neutraal. De man was volledig kaal en had donkere stoppelbaardgroei. In zijn hals viel een kronkelende tatoeage direct op. Na de verbale bedreiging beende hij resoluut de draaideur uit richting het busstation." }
+        ];
+
+        function renderWitnessSvg(cfg) {
+            const skin = COMPOSITE_PARTS.skin.find(s => s.id === cfg.skin) || COMPOSITE_PARTS.skin[0];
+            const neck = `<path d="M120,240 L120,330 L200,330 L200,240 Z" fill="${skin.shadow}" stroke="#263238" stroke-width="3"/>`;
+            const ears = `<ellipse cx="86" cy="180" rx="10" ry="20" fill="${skin.color}" stroke="#263238" stroke-width="2.5"/><ellipse cx="234" cy="180" rx="10" ry="20" fill="${skin.color}" stroke="#263238" stroke-width="2.5"/>`;
+            const head = (COMPOSITE_PARTS.head.find(h => h.id === cfg.head) || COMPOSITE_PARTS.head[0]).svg(skin);
+            const eyes = (COMPOSITE_PARTS.eyes.find(e => e.id === cfg.eyes) || COMPOSITE_PARTS.eyes[0]).svg();
+            const nose = (COMPOSITE_PARTS.nose.find(n => n.id === cfg.nose) || COMPOSITE_PARTS.nose[0]).svg();
+            const mouth = (COMPOSITE_PARTS.mouth.find(m => m.id === cfg.mouth) || COMPOSITE_PARTS.mouth[0]).svg();
+            const hair = (COMPOSITE_PARTS.hair.find(h => h.id === cfg.hair) || COMPOSITE_PARTS.hair[0]).svg();
+            const beard = (COMPOSITE_PARTS.beard.find(b => b.id === cfg.beard) || COMPOSITE_PARTS.beard[0]).svg();
+            const details = (COMPOSITE_PARTS.details.find(d => d.id === cfg.details) || COMPOSITE_PARTS.details[0]).svg();
+
+            return `<svg viewBox="0 0 320 380" style="width:105px; height:125px; background:#fdfbf7; border:2px solid #37474f; border-radius:6px; flex-shrink:0;">
+                <g>${neck}</g><g>${ears}</g><g>${head}</g><g>${eyes}</g><g>${nose}</g><g>${mouth}</g><g>${beard}</g><g>${hair}</g><g>${details}</g>
+            </svg>`;
+        }
+
+        function updateWitnessDossierView() {
+            const container = document.getElementById('witnessDossierContainer');
+            if (window.userRole !== 'getuige') {
+                container.style.display = 'none';
+                return;
+            }
+
+            // Koppel kamernummer aan dossier 1 t/m 25
+            const match = window.currentRoom.match(/\d+/);
+            const roomNum = match ? parseInt(match[0], 10) : 1;
+            const dossierIdx = (roomNum - 1) % 25;
+            const d = DOSSIERS_25[dossierIdx];
+
+            document.getElementById('dossierNumLabel').innerText = `Dossier #${String(d.id).padStart(2, '0')}`;
+            document.getElementById('dossierTitle').innerText = `Zaak: ${d.title}`;
+            document.getElementById('dossierText').innerHTML = `<strong>Getuigenverklaring (OVT):</strong><br>${d.text}`;
+            document.getElementById('dossierSvgWrap').innerHTML = renderWitnessSvg(d.cfg);
+            container.style.display = 'block';
+        }
+
         /* ================= 48 PACMAN WOORDEN ================= */
         const PACMAN_VOCABULARY = [
             { word: "determineren", def: "bepalen, vaststellen op grond van bepaalde kenmerken" },
@@ -1200,7 +1293,6 @@
             window.userName = naam;
             document.getElementById('pKlasLabel').innerText = klas;
 
-            // Microfoon en AudioContext direct actief maken bij de klik
             if (radioAudioCtx.state === 'suspended') radioAudioCtx.resume();
             getMicrophoneStream().catch(() => {});
 
@@ -1417,6 +1509,7 @@
                 deck.style.opacity = '1';
                 deck.style.pointerEvents = 'auto';
             }
+            updateWitnessDossierView();
         };
 
         window.syncSignalementText = (txt) => {
@@ -1439,6 +1532,7 @@
             window.currentRoom = document.getElementById('teamRoomSelect').value;
             document.getElementById('radioChannelName').innerText = `CH-01 [${window.currentRoom}]`;
             setupRoomListener();
+            updateWitnessDossierView();
         };
 
         function setupRoomListener() {
@@ -1447,7 +1541,6 @@
                 currentRoomUnsub = null;
             }
 
-            // Start vanaf huidig tijdstip zodat oude sessie-audio niet direct afspeelt
             lastRadioTimestamp = Date.now();
 
             currentRoomUnsub = onValue(ref(db, `classes/${window.currentClass}/rooms/${window.currentRoom}`), (snap) => {
@@ -1472,7 +1565,6 @@
                     }
                 }
 
-                // Inkomend radiobericht detectie: speelt af als het nieuw is en niet van jezelf
                 if (data.radio && data.radio.timestamp && data.radio.timestamp > lastRadioTimestamp) {
                     lastRadioTimestamp = data.radio.timestamp;
                     if (data.radio.senderName !== window.userName) {
@@ -1622,7 +1714,6 @@
                 }
             }
 
-            // Politiewagen
             ctx.save();
             ctx.translate(pCar.px + P_TILE/2, pCar.py + P_TILE/2);
             ctx.rotate(pCar.angle);
@@ -1635,7 +1726,6 @@
             ctx.fillStyle = pFlash ? '#00e5ff' : '#ff1744'; ctx.beginPath(); ctx.arc(-2,3,2.5,0,Math.PI*2); ctx.fill();
             ctx.restore();
 
-            // Diefjes
             pThieves.forEach(t => {
                 ctx.save();
                 ctx.translate(t.px + P_TILE/2, t.py + P_TILE/2);
