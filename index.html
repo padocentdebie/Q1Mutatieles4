@@ -338,10 +338,10 @@
         .pacman-input:focus { border-color: #00e5ff; }
         .pacman-input:read-only { background: #0d2818; border-color: #00e676; color: #b9f6ca; }
 
-        /* SCHERM 8: VOLLEDIG LICHAAM COMPOSIET APPLICATIE & PORTOFOON */
+        /* SCHERM 8 (KNOP 7): VOLLEDIG LICHAAM FORENSISCH SCHETSBORD & PORTOFOON */
         .composiet-grid {
             display: grid;
-            grid-template-columns: 370px 1fr 390px;
+            grid-template-columns: 360px 1fr 340px;
             height: 100%;
             background: #eef2f7;
             overflow: hidden;
@@ -371,96 +371,57 @@
             border-left: 2px solid #cfd8dc;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            padding: 14px;
+            overflow-y: auto;
         }
 
         .sketch-box {
             background: #fbf9f4;
-            border: 4px solid #3e3730;
+            border: 3px solid #37474f;
             border-radius: 8px;
-            padding: 10px 15px;
+            padding: 8px;
             text-align: center;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.18);
-            width: 100%;
-            max-width: 380px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+            position: relative;
         }
 
         .sketch-header {
-            font-size: 0.75em;
-            letter-spacing: 2px;
-            color: #63574c;
-            border-bottom: 2px dashed #b5a999;
-            padding-bottom: 5px;
-            margin-bottom: 8px;
+            font-size: 0.78em;
+            letter-spacing: 1.5px;
+            color: #455a64;
+            border-bottom: 2px dashed #cfd8dc;
+            padding-bottom: 6px;
+            margin-bottom: 6px;
             font-weight: bold;
             text-transform: uppercase;
-        }
-
-        #composite-svg {
-            width: 100%;
-            max-height: 480px;
-            height: auto;
-            background: #faf8f3;
-            border: 1px solid #dcd4c7;
-            border-radius: 4px;
-        }
-
-        .parts-tab-bar {
             display: flex;
-            background: var(--primary);
-            overflow-x: auto;
-            border-bottom: 2px solid var(--gold);
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .tab-btn {
-            padding: 9px 10px;
-            color: white;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            font-size: 0.72em;
-            font-weight: bold;
-            white-space: nowrap;
+        #compCanvasWrap {
+            position: relative;
+            width: 340px;
+            height: 480px;
+            background: #fff;
+            border: 2px solid #b0bec5;
+            border-radius: 4px;
+            margin: 0 auto;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
         }
 
-        .tab-btn.active {
-            background: white;
-            color: var(--primary);
-            border-top: 3px solid var(--gold);
+        #compBgCanvas, #compDrawCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 340px;
+            height: 480px;
         }
 
-        .parts-deck {
-            padding: 12px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            overflow-y: auto;
-            flex: 1;
-        }
-
-        .part-opt {
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            padding: 10px 6px;
-            text-align: center;
-            cursor: pointer;
-            background: #fafafa;
-            transition: all 0.2s;
-        }
-
-        .part-opt:hover { border-color: var(--primary); background: #e3f2fd; }
-        .part-opt.active {
-            border-color: var(--ovt-green);
-            background: #e8f5e9;
-            box-shadow: 0 0 0 2px var(--ovt-green);
-        }
-
-        .part-opt span {
-            display: block;
-            margin-top: 6px;
-            font-size: 0.75em;
-            font-weight: bold;
-            color: #37474f;
+        #compDrawCanvas {
+            cursor: crosshair;
+            touch-action: none;
         }
 
         .role-pill {
@@ -576,6 +537,72 @@
             padding: 10px;
             max-height: 120px;
             overflow-y: auto;
+        }
+
+        /* RECHTS TEKENGEREEDSCHAP PANEEL */
+        .tool-section {
+            margin-bottom: 14px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .tool-title {
+            font-size: 0.8em;
+            font-weight: bold;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tool-btn-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        .tool-btn {
+            padding: 8px 6px;
+            border: 2px solid #cfd8dc;
+            background: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75em;
+            font-weight: bold;
+            text-align: center;
+            color: #37474f;
+            transition: all 0.15s;
+        }
+
+        .tool-btn.active {
+            border-color: var(--primary);
+            background: #e3f2fd;
+            color: var(--primary);
+        }
+
+        .color-palette {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .color-dot {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 2px solid #b0bec5;
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+        .color-dot.active {
+            transform: scale(1.15);
+            border-color: #000;
+            box-shadow: 0 0 0 2px var(--gold);
         }
 
         iframe { width: 100%; height: 100%; border: none; }
@@ -719,7 +746,7 @@
         </div>
     </div>
 
-    <!-- SCHERM 8: REALTIME COMPOSIETKAMER & INGEBOUWDE PORTOFOON -->
+    <!-- SCHERM 8 (KNOP 7): FORENSISCH COMPOSIET-TEKENBORD & INGEBOUWDE PORTOFOON -->
     <div id="screen-8" class="screen">
         <div class="composiet-grid">
             <div class="comp-left">
@@ -744,7 +771,7 @@
 
                 <div style="display: flex; gap: 6px; margin-bottom: 8px;">
                     <button id="btnRoleGetuige" onclick="setRole('getuige')" style="flex:1; padding: 6px; border: 1px solid #90caf9; border-radius: 4px; font-size: 0.75em; cursor: pointer; font-weight: bold;">👀 Ooggetuige</button>
-                    <button id="btnRoleRechercheur" onclick="setRole('rechercheur')" style="flex:1; padding: 6px; border: 1px solid #a5d6a7; border-radius: 4px; font-size: 0.75em; cursor: pointer; font-weight: bold;">🎨 Compositeur</button>
+                    <button id="btnRoleRechercheur" onclick="setRole('rechercheur')" style="flex:1; padding: 6px; border: 1px solid #a5d6a7; border-radius: 4px; font-size: 0.75em; cursor: pointer; font-weight: bold;">🎨 Compositeur (Tekenaar)</button>
                 </div>
 
                 <div id="roleBadgeContainer"></div>
@@ -755,12 +782,9 @@
                         <span><i class="fa-solid fa-file-shield"></i> Daderdossier (Getuige)</span>
                         <span id="dossierNumLabel">Dossier #01</span>
                     </div>
-                    <div style="display:flex; gap:10px; align-items:flex-start;">
-                        <div id="dossierSvgWrap"></div>
-                        <div style="flex:1;">
-                            <div id="dossierTitle" style="font-size:0.78em; font-weight:bold; color:#1c2b4b; margin-bottom:4px;"></div>
-                            <div style="font-size:0.72em; color:#222; line-height:1.35; max-height:120px; overflow-y:auto; background:#ffffff; padding:6px; border-radius:4px; border:1px solid #ffe082;" id="dossierText"></div>
-                        </div>
+                    <div style="padding:6px; background:#fff; border-radius:4px; border:1px solid #ffe082;">
+                        <div id="dossierTitle" style="font-size:0.82em; font-weight:bold; color:#1c2b4b; margin-bottom:4px;"></div>
+                        <div style="font-size:0.75em; color:#222; line-height:1.4; max-height:140px; overflow-y:auto;" id="dossierText"></div>
                     </div>
                 </div>
 
@@ -778,7 +802,7 @@
                 </div>
 
                 <div style="background: #fff8e1; border-left: 3px solid #ffb300; padding: 6px 8px; font-size: 0.72em; margin-top: 8px;">
-                    <strong>Opdracht:</strong> Werk fysiek op afstand in het gebouw! Communiceer via de porto in <strong>OVT</strong>.
+                    <strong>Opdracht:</strong> Werk fysiek op afstand in het lokaal! Communiceer uitsluitend via de porto in <strong>OVT</strong>.
                 </div>
 
                 <label style="font-size: 0.75em; font-weight: bold; margin-top: 6px; margin-bottom: 2px;">Signalement Tekst (Live Protocol):</label>
@@ -801,26 +825,25 @@
 
             <div class="comp-center">
                 <div class="sketch-box">
-                    <div class="sketch-header">Politieacademie • Volledig Lichaam Composiet</div>
+                    <div class="sketch-header">
+                        <span><i class="fa-solid fa-pen-nib"></i> Forensisch Tekenbord</span>
+                        <span id="sketch-caption" style="color:var(--primary); font-weight:bold;">Dossier: Duo-1</span>
+                    </div>
                     
-                    <svg id="composite-svg" viewBox="0 0 320 540">
-                        <g id="layer-bg-acc"></g>
-                        <g id="layer-body-base"></g>
-                        <g id="layer-face-features"></g>
-                        <g id="layer-hair"></g>
-                        <g id="layer-pants"></g>
-                        <g id="layer-shoes"></g>
-                        <g id="layer-upper"></g>
-                        <g id="layer-fg-acc"></g>
-                    </svg>
+                    <div id="compCanvasWrap">
+                        <!-- Onderlaag met optionele anatomische hulplijn (paspop) -->
+                        <canvas id="compBgCanvas" width="340" height="480"></canvas>
+                        <!-- Tekenlaag met de tekenpen -->
+                        <canvas id="compDrawCanvas" width="340" height="480"></canvas>
+                    </div>
 
-                    <div style="margin-top: 6px; font-size: 0.75em; color: #546e7a;" id="sketch-caption">
-                        Dossier: <strong>Duo-1</strong>
+                    <div style="margin-top: 8px; font-size: 0.72em; color: #546e7a;">
+                        Teken met de <strong>Tekenpen</strong> de verdachte op basis van de getuigenverklaring via de portofoon.
                     </div>
                 </div>
 
                 <div style="margin-top: 8px; display: flex; gap: 8px;">
-                    <button onclick="resetComposite()" style="background:#90a4ae; color:white; border:none; padding:7px 12px; border-radius:4px; font-weight:bold; cursor:pointer; font-size:0.75em;"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+                    <button onclick="clearCompCanvas(true)" style="background:#ef5350; color:white; border:none; padding:7px 12px; border-radius:4px; font-weight:bold; cursor:pointer; font-size:0.75em;"><i class="fa-solid fa-eraser"></i> Wis Tekening</button>
                     <button onclick="exportSignalement()" style="background:var(--ovt-green); color:white; border:none; padding:7px 14px; border-radius:4px; font-weight:bold; cursor:pointer; font-size:0.75em;"><i class="fa-solid fa-cloud-arrow-up"></i> Zend naar Korpsfeed</button>
                 </div>
 
@@ -830,18 +853,54 @@
                 </div>
             </div>
 
+            <!-- RECHTERKOLOM: TEKENGEREEDSCHAP EN HULPLIJNEN -->
             <div class="comp-right">
-                <div class="parts-tab-bar">
-                    <button class="tab-btn active" onclick="switchCategory('skin')">Huid</button>
-                    <button class="tab-btn" onclick="switchCategory('hair')">Hoofd/Haar</button>
-                    <button class="tab-btn" onclick="switchCategory('jacket')">Bovenkleding</button>
-                    <button class="tab-btn" onclick="switchCategory('jacketColor')">Kleur Jas</button>
-                    <button class="tab-btn" onclick="switchCategory('pants')">Broek</button>
-                    <button class="tab-btn" onclick="switchCategory('pantsColor')">Kleur Broek</button>
-                    <button class="tab-btn" onclick="switchCategory('shoes')">Schoeisel</button>
-                    <button class="tab-btn" onclick="switchCategory('accessory')">Accessoires</button>
+                <div class="tool-section">
+                    <div class="tool-title"><i class="fa-solid fa-pen"></i> Tekengereedschap</div>
+                    <div class="tool-btn-grid">
+                        <button class="tool-btn active" id="btnToolPen" onclick="setCompTool('pen')"><i class="fa-solid fa-pen"></i> Pen</button>
+                        <button class="tool-btn" id="btnToolMarker" onclick="setCompTool('marker')"><i class="fa-solid fa-highlighter"></i> Stift</button>
+                        <button class="tool-btn" id="btnToolEraser" onclick="setCompTool('eraser')"><i class="fa-solid fa-eraser"></i> Gum</button>
+                    </div>
                 </div>
-                <div class="parts-deck" id="partsDeck"></div>
+
+                <div class="tool-section">
+                    <div class="tool-title"><i class="fa-solid fa-ruler-horizontal"></i> Pendikte</div>
+                    <div class="tool-btn-grid">
+                        <button class="tool-btn active" id="btnSize2" onclick="setCompSize(2)">Fijn (2px)</button>
+                        <button class="tool-btn" id="btnSize4" onclick="setCompSize(4)">Normaal (4px)</button>
+                        <button class="tool-btn" id="btnSize8" onclick="setCompSize(8)">Breed (8px)</button>
+                    </div>
+                </div>
+
+                <div class="tool-section">
+                    <div class="tool-title"><i class="fa-solid fa-palette"></i> Tekenkleur</div>
+                    <div class="color-palette">
+                        <div class="color-dot active" style="background:#111111;" onclick="setCompColor('#111111', this)" title="Zwart / Grafiet"></div>
+                        <div class="color-dot" style="background:#555555;" onclick="setCompColor('#555555', this)" title="Donkergrijs"></div>
+                        <div class="color-dot" style="background:#003082;" onclick="setCompColor('#003082', this)" title="Politieblauw"></div>
+                        <div class="color-dot" style="background:#1b3a6b;" onclick="setCompColor('#1b3a6b', this)" title="Donkerblauw"></div>
+                        <div class="color-dot" style="background:#b71c1c;" onclick="setCompColor('#b71c1c', this)" title="Signaalrood"></div>
+                        <div class="color-dot" style="background:#2e4c27;" onclick="setCompColor('#2e4c27', this)" title="Legergroen"></div>
+                        <div class="color-dot" style="background:#cca27c;" onclick="setCompColor('#cca27c', this)" title="Getint / Huidskleur"></div>
+                        <div class="color-dot" style="background:#855635;" onclick="setCompColor('#855635', this)" title="Donkerbruin"></div>
+                        <div class="color-dot" style="background:#f7dfce;" onclick="setCompColor('#f7dfce', this)" title="Lichte Huidskleur"></div>
+                        <div class="color-dot" style="background:#ffffff; border-color:#999;" onclick="setCompColor('#ffffff', this)" title="Wit (Sneakers/accenten)"></div>
+                    </div>
+                </div>
+
+                <div class="tool-section">
+                    <div class="tool-title"><i class="fa-solid fa-person"></i> Forensische Paspop / Hulplijn</div>
+                    <label style="font-size:0.75em; display:flex; align-items:center; gap:6px; cursor:pointer;">
+                        <input type="checkbox" id="chkGhostBody" checked onchange="toggleGhostBody()">
+                        Toon lichaamscontour als schetshulp
+                    </label>
+                </div>
+
+                <div style="background:#e3f2fd; border:1px solid #90caf9; padding:8px; border-radius:6px; font-size:0.75em; color:#0d47a1;">
+                    <strong>Tip voor de Compositeur:</strong><br>
+                    Luister aandachtig naar je partner via de portofoon. Teken eerst de lichaamsbouw en het hoofd, daarna de kleding en opvallende accessoires.
+                </div>
             </div>
         </div>
     </div>
@@ -865,7 +924,6 @@
         window.userName = "";
         window.currentRoom = "Duo-1";
         window.userRole = "rechercheur";
-        window.activeCategory = "skin";
 
         let penActive = false;
         let drawing = false;
@@ -1115,309 +1173,213 @@
             });
         }
 
-        /* ================= VOLLEDIG LICHAAM FORENSISCHE COMPOSIET ================= */
-        const compositeState = {
-            skin: 'light',
-            hair: 'short',
-            jacket: 'hoodie',
-            jacketColor: '#1e232a',
-            pants: 'jeans',
-            pantsColor: '#2b4c7e',
-            shoes: 'sneakers',
-            accessory: 'none'
+        /* ================= SCHERM 8: FORENSISCH COMPOSIET-TEKENBORD MET TEKENPEN ================= */
+        let compTool = 'pen'; // 'pen', 'marker', 'eraser'
+        let compSize = 2;
+        let compColor = '#111111';
+        let isCompDrawing = false;
+        let compLastPos = { x: 0, y: 0 };
+        let showGhost = true;
+
+        window.setCompTool = (tool) => {
+            compTool = tool;
+            document.querySelectorAll('#btnToolPen, #btnToolMarker, #btnToolEraser').forEach(b => b.classList.remove('active'));
+            if(tool === 'pen') document.getElementById('btnToolPen').classList.add('active');
+            if(tool === 'marker') document.getElementById('btnToolMarker').classList.add('active');
+            if(tool === 'eraser') document.getElementById('btnToolEraser').classList.add('active');
         };
 
-        const COMPOSITE_PARTS = {
-            skin: [
-                { id: 'light', name: 'Licht / Bleek', color: '#f7dfce', shadow: '#d8b499', stroke: '#362a22' },
-                { id: 'tinted', name: 'Getint / Olijf', color: '#cca27c', shadow: '#a97c55', stroke: '#2e1e14' },
-                { id: 'dark', name: 'Donkerbruin', color: '#855635', shadow: '#61381c', stroke: '#201006' },
-                { id: 'deep_dark', name: 'Diep Donker', color: '#4a2c1a', shadow: '#321b0e', stroke: '#140803' }
-            ],
-            hair: [
-                { id: 'short', name: 'Kort opgeschoren', icon: 'fa-user' },
-                { id: 'bald', name: 'Kaal', icon: 'fa-circle-user' },
-                { id: 'wavy', name: 'Halflang / Golvend', icon: 'fa-wind' },
-                { id: 'cap', name: 'Zwarte Baseballpet', icon: 'fa-hat-cowboy' },
-                { id: 'beanie', name: 'Gebreide Muts', icon: 'fa-mitten' }
-            ],
-            jacket: [
-                { id: 'hoodie', name: 'Hoodie (Capuchon)', icon: 'fa-shirt' },
-                { id: 'bomber', name: 'Bomberjack', icon: 'fa-vest' },
-                { id: 'parka', name: 'Lange Winterparka', icon: 'fa-vest-patches' },
-                { id: 'sweater', name: 'Nette Trui / Ronde Hals', icon: 'fa-tshirt' },
-                { id: 'trackjacket', name: 'Sport Trainingsjack', icon: 'fa-running' }
-            ],
-            jacketColor: [
-                { id: '#1e232a', name: 'Zwart / Antraciet', hex: '#1e232a' },
-                { id: '#1b3a6b', name: 'Donkerblauw', hex: '#1b3a6b' },
-                { id: '#b71c1c', name: 'Signaalrood', hex: '#b71c1c' },
-                { id: '#2e4c27', name: 'Legergroen', hex: '#2e4c27' },
-                { id: '#cfd8dc', name: 'Lichtgrijs Melange', hex: '#cfd8dc' }
-            ],
-            pants: [
-                { id: 'jeans', name: 'Spijkerbroek (Denim)', icon: 'fa-socks' },
-                { id: 'jogging', name: 'Joggingbroek', icon: 'fa-person-running' },
-                { id: 'cargo', name: 'Cargobroek (Zakken)', icon: 'fa-box' },
-                { id: 'pantalon', name: 'Strakke Pantalon', icon: 'fa-user-tie' }
-            ],
-            pantsColor: [
-                { id: '#2b4c7e', name: 'Denim Blauw', hex: '#2b4c7e' },
-                { id: '#212121', name: 'Diep Zwart', hex: '#212121' },
-                { id: '#616161', name: 'Middengrijs', hex: '#616161' },
-                { id: '#c7b299', name: 'Beige / Chino', hex: '#c7b299' },
-                { id: '#3e4f3a', name: 'Legergroen', hex: '#3e4f3a' }
-            ],
-            shoes: [
-                { id: 'sneakers', name: 'Witte Sneakers', icon: 'fa-shoe-prints' },
-                { id: 'boots', name: 'Zware Werkschoenen / Boots', icon: 'fa-boot' },
-                { id: 'runners', name: 'Sportschoenen (Neon)', icon: 'fa-bolt' }
-            ],
-            accessory: [
-                { id: 'none', name: 'Geen Accessoires', icon: 'fa-ban' },
-                { id: 'backpack', name: 'Rugzak (Riemen over borst)', icon: 'fa-backpack' },
-                { id: 'crossbody', name: 'Schoudertas (Diagonaal)', icon: 'fa-bag-shopping' },
-                { id: 'waistbag', name: 'Heuptasje / Fannypack', icon: 'fa-ticket' },
-                { id: 'glasses', name: 'Donkere Zonnebril', icon: 'fa-glasses' }
-            ]
+        window.setCompSize = (sz) => {
+            compSize = sz;
+            document.querySelectorAll('#btnSize2, #btnSize4, #btnSize8').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btnSize${sz}`).classList.add('active');
         };
 
-        function generateBodySVG(cfg) {
-            const skin = COMPOSITE_PARTS.skin.find(s => s.id === cfg.skin) || COMPOSITE_PARTS.skin[0];
-            const jColor = cfg.jacketColor || '#1e232a';
-            const pColor = cfg.pantsColor || '#2b4c7e';
+        window.setCompColor = (col, el) => {
+            compColor = col;
+            document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+            if(el) el.classList.add('active');
+            if(compTool === 'eraser') window.setCompTool('pen');
+        };
 
-            // 1. ACHTERGROND ACCESSOIRES (RUGZAK)
-            let bgAcc = "";
-            if (cfg.accessory === 'backpack') {
-                bgAcc = `<rect x="90" y="145" width="140" height="150" rx="20" fill="#263238" stroke="#102027" stroke-width="2.5"/>`;
-            }
+        window.toggleGhostBody = () => {
+            showGhost = document.getElementById('chkGhostBody').checked;
+            drawGhostBody();
+        };
 
-            // 2. BASIS LICHAAM
-            let bodyBase = `
-                <!-- Nek -->
-                <rect x="150" y="95" width="20" height="28" fill="${skin.color}" stroke="${skin.stroke}" stroke-width="1.8"/>
-                <!-- Hoofd -->
-                <ellipse cx="160" cy="68" rx="26" ry="34" fill="${skin.color}" stroke="${skin.stroke}" stroke-width="2.2"/>
-                <!-- Oren -->
-                <ellipse cx="134" cy="68" rx="4.5" ry="8" fill="${skin.color}" stroke="${skin.stroke}" stroke-width="1.8"/>
-                <ellipse cx="186" cy="68" rx="4.5" ry="8" fill="${skin.color}" stroke="${skin.stroke}" stroke-width="1.8"/>
-                <!-- Handen -->
-                <circle cx="82" cy="275" r="10" fill="${skin.color}" stroke="${skin.stroke}" stroke-width="1.8"/>
-                <circle cx="238" cy="275" r="10" fill="${skin.color}" stroke="${skin.stroke}" stroke-width="1.8"/>
-            `;
+        function drawGhostBody() {
+            const bgCanvas = document.getElementById('compBgCanvas');
+            if (!bgCanvas) return;
+            const ctx = bgCanvas.getContext('2d');
+            ctx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
 
-            // 3. GEZICHTSKENMERKEN
-            let faceFeatures = `
-                <path d="M145,58 Q152,55 156,58" stroke="#221b16" stroke-width="2" fill="none"/>
-                <path d="M164,58 Q168,55 175,58" stroke="#221b16" stroke-width="2" fill="none"/>
-                <circle cx="151" cy="64" r="2.8" fill="#1c2b4b"/>
-                <circle cx="169" cy="64" r="2.8" fill="#1c2b4b"/>
-                <path d="M160,63 L158,74 L163,74" stroke="#4e342e" stroke-width="1.5" fill="none"/>
-                <path d="M154,84 Q160,86 166,84" stroke="#5d4037" stroke-width="1.8" fill="none"/>
-            `;
+            if (!showGhost) return;
 
-            // 4. HAAR / HOOFDDEKSEL
-            let hairSVG = "";
-            if (cfg.hair === 'short') {
-                hairSVG = `<path d="M134,60 C134,36 186,36 186,60 C186,45 175,40 160,40 C145,40 134,45 134,60 Z" fill="#212121" stroke="#111" stroke-width="2"/>`;
-            } else if (cfg.hair === 'wavy') {
-                hairSVG = `
-                    <path d="M132,68 C128,40 145,32 160,32 C175,32 192,40 188,68 C185,50 178,42 160,42 C142,42 135,50 132,68 Z" fill="#3e2723" stroke="#1b0000" stroke-width="2"/>
-                    <path d="M130,68 Q125,82 132,92 M190,68 Q195,82 188,92" stroke="#3e2723" stroke-width="3" fill="none"/>
-                `;
-            } else if (cfg.hair === 'cap') {
-                hairSVG = `
-                    <path d="M132,60 C132,40 188,40 188,60 Z" fill="#1c2b4b" stroke="#0d1b2a" stroke-width="2"/>
-                    <path d="M130,60 Q160,54 200,62 L198,66 Q160,58 130,64 Z" fill="#111" stroke="#000" stroke-width="1.5"/>
-                `;
-            } else if (cfg.hair === 'beanie') {
-                hairSVG = `
-                    <path d="M132,65 C130,35 190,35 188,65 Z" fill="#37474f" stroke="#212121" stroke-width="2"/>
-                    <rect x="131" y="58" width="58" height="9" rx="3" fill="#455a64" stroke="#212121" stroke-width="1.5"/>
-                `;
-            }
+            ctx.save();
+            ctx.strokeStyle = '#d7dde4';
+            ctx.fillStyle = '#f8fafc';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 4]);
 
-            // 5. BROEK
-            let pantsSVG = "";
-            if (cfg.pants === 'jeans') {
-                pantsSVG = `
-                    <path d="M125,270 L195,270 L202,465 L174,465 L160,325 L146,465 L118,465 Z" fill="${pColor}" stroke="#1a202c" stroke-width="2"/>
-                    <path d="M160,270 L160,325" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="2,2"/>
-                    <path d="M132,275 Q145,285 156,275 M164,275 Q175,285 188,275" stroke="#f59e0b" stroke-width="1.2" fill="none"/>
-                `;
-            } else if (cfg.pants === 'jogging') {
-                pantsSVG = `
-                    <path d="M124,270 L196,270 L199,460 L176,460 L160,330 L144,460 L121,460 Z" fill="${pColor}" stroke="#1a202c" stroke-width="2"/>
-                    <rect x="120" y="458" width="26" height="8" rx="3" fill="#424242"/>
-                    <rect x="174" y="458" width="26" height="8" rx="3" fill="#424242"/>
-                    <path d="M125,275 L122,458 M195,275 L198,458" stroke="#ffffff" stroke-width="2.2" opacity="0.8"/>
-                    <line x1="158" y1="274" x2="157" y2="284" stroke="#fff" stroke-width="1.5"/>
-                    <line x1="162" y1="274" x2="163" y2="284" stroke="#fff" stroke-width="1.5"/>
-                `;
-            } else if (cfg.pants === 'cargo') {
-                pantsSVG = `
-                    <path d="M123,270 L197,270 L204,465 L175,465 L160,320 L145,465 L116,465 Z" fill="${pColor}" stroke="#111" stroke-width="1.5"/>
-                    <line x1="115" y1="352" x2="129" y2="352" stroke="#111" stroke-width="1.5"/>
-                    <rect x="191" y="345" width="14" height="24" rx="2" fill="${pColor}" stroke="#111" stroke-width="1.5"/>
-                    <line x1="191" y1="352" x2="205" y2="352" stroke="#111" stroke-width="1.5"/>
-                `;
-            } else if (cfg.pants === 'pantalon') {
-                pantsSVG = `
-                    <path d="M126,270 L194,270 L200,465 L174,465 L160,315 L146,465 L120,465 Z" fill="${pColor}" stroke="#111" stroke-width="2"/>
-                    <line x1="133" y1="280" x2="133" y2="465" stroke="#ffffff" stroke-width="0.8" opacity="0.4"/>
-                    <line x1="187" y1="280" x2="187" y2="465" stroke="#ffffff" stroke-width="0.8" opacity="0.4"/>
-                `;
-            }
+            // Hoofd
+            ctx.beginPath();
+            ctx.ellipse(170, 70, 30, 40, 0, 0, Math.PI * 2);
+            ctx.stroke();
 
-            // 6. SCHOEISEL
-            let shoesSVG = "";
-            if (cfg.shoes === 'sneakers') {
-                shoesSVG = `
-                    <path d="M115,465 L145,465 L148,485 L106,485 Q106,475 115,465 Z" fill="#ffffff" stroke="#333" stroke-width="1.8"/>
-                    <rect x="106" y="482" width="42" height="6" fill="#e0e0e0" stroke="#333" stroke-width="1"/>
-                    <path d="M175,465 L205,465 Q214,475 214,485 L172,485 L175,465 Z" fill="#ffffff" stroke="#333" stroke-width="1.8"/>
-                    <rect x="172" y="482" width="42" height="6" fill="#e0e0e0" stroke="#333" stroke-width="1"/>
-                `;
-            } else if (cfg.shoes === 'boots') {
-                shoesSVG = `
-                    <path d="M116,458 L146,458 L149,488 L104,488 L105,475 Z" fill="#211510" stroke="#000" stroke-width="2"/>
-                    <line x1="104" y1="484" x2="149" y2="484" stroke="#8d6e63" stroke-width="2"/>
-                    <path d="M174,458 L204,458 L215,475 L216,488 L171,488 Z" fill="#211510" stroke="#000" stroke-width="2"/>
-                    <line x1="171" y1="484" x2="216" y2="484" stroke="#8d6e63" stroke-width="2"/>
-                `;
-            } else if (cfg.shoes === 'runners') {
-                shoesSVG = `
-                    <path d="M115,465 L145,465 L149,485 L105,485 Z" fill="#37474f" stroke="#222" stroke-width="1.5"/>
-                    <path d="M104,484 L150,484 L148,489 L104,489 Z" fill="#00e5ff" stroke="#00838f" stroke-width="1"/>
-                    <path d="M175,465 L205,465 L215,485 L171,485 Z" fill="#37474f" stroke="#222" stroke-width="1.5"/>
-                    <path d="M170,484 L216,484 L216,489 L172,489 Z" fill="#00e5ff" stroke="#00838f" stroke-width="1"/>
-                `;
-            }
+            // Nek
+            ctx.beginPath();
+            ctx.rect(158, 108, 24, 22);
+            ctx.stroke();
 
-            // 7. BOVENKLEDING
-            let upperSVG = "";
-            if (cfg.jacket === 'hoodie') {
-                upperSVG = `
-                    <path d="M125,125 L80,265 L96,268 L130,175 Z" fill="${jColor}" stroke="#111" stroke-width="2"/>
-                    <path d="M195,125 L240,265 L224,268 L190,175 Z" fill="${jColor}" stroke="#111" stroke-width="2"/>
-                    <path d="M125,125 Q160,135 195,125 L200,275 L120,275 Z" fill="${jColor}" stroke="#111" stroke-width="1.5"/>
-                    <path d="M142,118 Q160,136 178,118 Q160,144 142,118 Z" fill="#111" opacity="0.35"/>
-                    <line x1="154" y1="128" x2="152" y2="155" stroke="#ffffff" stroke-width="1.5"/>
-                    <line x1="166" y1="128" x2="168" y2="155" stroke="#ffffff" stroke-width="1.5"/>
-                `;
-            } else if (cfg.jacket === 'bomber') {
-                upperSVG = `
-                    <path d="M122,125 L76,260 L92,264 L128,170 Z" fill="${jColor}" stroke="#111" stroke-width="2"/>
-                    <path d="M198,125 L244,260 L228,264 L192,170 Z" fill="${jColor}" stroke="#111" stroke-width="2"/>
-                    <path d="M122,125 L198,125 L205,255 L115,255 Z" fill="${jColor}" stroke="#111" stroke-width="2"/>
-                    <rect x="114" y="253" width="92" height="12" rx="3" fill="#212121" stroke="#111" stroke-width="1.5"/>
-                    <line x1="160" y1="125" x2="160" y2="253" stroke="#ffd54f" stroke-width="2"/>
-                    <rect x="80" y="195" width="6" height="16" fill="#ff5722"/>
-                `;
-            } else if (cfg.jacket === 'parka') {
-                upperSVG = `
-                    <path d="M125,125 L78,265 L94,268 L128,175 Z" fill="${jColor}" stroke="#111" stroke-width="2"/>
-                    <path d="M195,125 L242,265 L226,268 L192,175 Z" fill="${jColor}" stroke="#111" stroke-width="2"/>
-                    <path d="M125,125 L195,125 L202,305 L118,305 Z" fill="${jColor}" stroke="#111" stroke-width="2"/>
-                    <line x1="160" y1="125" x2="160" y2="305" stroke="#111" stroke-width="2"/>
-                    <rect x="122" y="260" width="22" height="18" rx="2" fill="${jColor}" stroke="#111" stroke-width="1.5" filter="brightness(0.85)"/>
-                `;
-            } else if (cfg.jacket === 'sweater') {
-                upperSVG = `
-                    <path d="M126,125 L82,262 L96,265 L130,175 Z" fill="${jColor}" stroke="#111" stroke-width="2"/>
-                    <path d="M194,125 L238,262 L224,265 L190,175 Z" fill="${jColor}" stroke="#111" stroke-width="2"/>
-                    <path d="M126,125 Q160,132 194,125 L197,270 L123,270 Z" fill="${jColor}" stroke="#111" stroke-width="2"/>
-                    <path d="M148,118 Q160,132 172,118" stroke="#111" stroke-width="2" fill="none"/>
-                `;
-            } else if (cfg.jacket === 'trackjacket') {
-                upperSVG = `
-                    <path d="M125,125 L79,264 L95,266 L129,172 Z" fill="${jColor}" stroke="#111" stroke-width="2"/>
-                    <path d="M195,125 L241,264 L225,266 L191,172 Z" fill="${jColor}" stroke="#111" stroke-width="2"/>
-                    <path d="M125,125 L195,125 L198,268 L122,268 Z" fill="${jColor}" stroke="#111" stroke-width="2"/>
-                    <path d="M124,127 L82,261" stroke="#ffffff" stroke-width="2.5" fill="none"/>
-                    <path d="M196,127 L238,261" stroke="#ffffff" stroke-width="2.5" fill="none"/>
-                    <line x1="160" y1="122" x2="160" y2="268" stroke="#ffffff" stroke-width="2"/>
-                `;
-            }
+            // Schouders en romp
+            ctx.beginPath();
+            ctx.moveTo(115, 135);
+            ctx.lineTo(225, 135);
+            ctx.lineTo(210, 275);
+            ctx.lineTo(130, 275);
+            ctx.closePath();
+            ctx.stroke();
 
-            // 8. VOORGROND ACCESSOIRES
-            let fgAcc = "";
-            if (cfg.accessory === 'backpack') {
-                fgAcc = `
-                    <path d="M135,130 L135,270 M185,130 L185,270" stroke="#263238" stroke-width="7" stroke-linecap="round"/>
-                    <path d="M135,130 L135,270 M185,130 L185,270" stroke="#607d8b" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="135" y1="190" x2="185" y2="190" stroke="#212121" stroke-width="3"/>
-                `;
-            } else if (cfg.accessory === 'crossbody') {
-                fgAcc = `
-                    <line x1="130" y1="126" x2="195" y2="265" stroke="#111" stroke-width="6"/>
-                    <line x1="130" y1="126" x2="195" y2="265" stroke="#ffb300" stroke-width="1.8"/>
-                    <rect x="182" y="248" width="36" height="30" rx="4" fill="#212121" stroke="#ffb300" stroke-width="1.5"/>
-                `;
-            } else if (cfg.accessory === 'waistbag') {
-                fgAcc = `
-                    <ellipse cx="160" cy="245" rx="34" ry="12" fill="#263238" stroke="#00e5ff" stroke-width="1.8"/>
-                    <line x1="140" y1="244" x2="180" y2="244" stroke="#ffffff" stroke-width="1.5"/>
-                `;
-            } else if (cfg.accessory === 'glasses') {
-                fgAcc = `
-                    <rect x="144" y="60" width="14" height="8" rx="2" fill="#111" stroke="#000" stroke-width="1.5"/>
-                    <rect x="162" y="60" width="14" height="8" rx="2" fill="#111" stroke="#000" stroke-width="1.5"/>
-                    <line x1="158" y1="63" x2="162" y2="63" stroke="#000" stroke-width="1.5"/>
-                `;
-            }
+            // Armen
+            ctx.beginPath();
+            ctx.moveTo(115, 135); ctx.lineTo(85, 270);
+            ctx.moveTo(225, 135); ctx.lineTo(255, 270);
+            ctx.stroke();
 
-            return `
-                <g>${bgAcc}</g>
-                <g>${bodyBase}</g>
-                <g>${faceFeatures}</g>
-                <g>${hairSVG}</g>
-                <g>${pantsSVG}</g>
-                <g>${shoesSVG}</g>
-                <g>${upperSVG}</g>
-                <g>${fgAcc}</g>
-            `;
+            // Benen
+            ctx.beginPath();
+            ctx.moveTo(130, 275); ctx.lineTo(120, 440);
+            ctx.moveTo(160, 275); ctx.lineTo(160, 440);
+            ctx.moveTo(180, 275); ctx.lineTo(180, 440);
+            ctx.moveTo(210, 275); ctx.lineTo(220, 440);
+            ctx.stroke();
+
+            // Schoeisel omtrek
+            ctx.strokeRect(105, 440, 36, 18);
+            ctx.strokeRect(199, 440, 36, 18);
+
+            ctx.restore();
         }
+
+        function initCompDrawingCanvas() {
+            const canvas = document.getElementById('compDrawCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            drawGhostBody();
+
+            const getPos = (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const cx = e.touches ? e.touches[0].clientX : e.clientX;
+                const cy = e.touches ? e.touches[0].clientY : e.clientY;
+                return {
+                    x: (cx - rect.left) * (canvas.width / rect.width),
+                    y: (cy - rect.top) * (canvas.height / rect.height)
+                };
+            };
+
+            const startDraw = (e) => {
+                if(window.userRole !== 'rechercheur') return;
+                e.preventDefault();
+                isCompDrawing = true;
+                compLastPos = getPos(e);
+            };
+
+            const moveDraw = (e) => {
+                if(!isCompDrawing || window.userRole !== 'rechercheur') return;
+                e.preventDefault();
+                const p = getPos(e);
+
+                ctx.save();
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                if (compTool === 'eraser') {
+                    ctx.globalCompositeOperation = 'destination-out';
+                    ctx.lineWidth = compSize * 4;
+                } else if (compTool === 'marker') {
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.strokeStyle = compColor;
+                    ctx.lineWidth = compSize * 2.5;
+                    ctx.globalAlpha = 0.35;
+                } else {
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.strokeStyle = compColor;
+                    ctx.lineWidth = compSize;
+                    ctx.globalAlpha = 1.0;
+                }
+
+                ctx.beginPath();
+                ctx.moveTo(compLastPos.x, compLastPos.y);
+                ctx.lineTo(p.x, p.y);
+                ctx.stroke();
+                ctx.restore();
+
+                compLastPos = p;
+            };
+
+            const stopDraw = () => {
+                if(!isCompDrawing) return;
+                isCompDrawing = false;
+                syncCompCanvas();
+            };
+
+            canvas.addEventListener('mousedown', startDraw);
+            canvas.addEventListener('mousemove', moveDraw);
+            window.addEventListener('mouseup', stopDraw);
+
+            canvas.addEventListener('touchstart', startDraw, { passive: false });
+            canvas.addEventListener('touchmove', moveDraw, { passive: false });
+            window.addEventListener('touchend', stopDraw);
+        }
+
+        function syncCompCanvas() {
+            const canvas = document.getElementById('compDrawCanvas');
+            if(!canvas || !window.currentClass || !window.currentRoom) return;
+            const dataUrl = canvas.toDataURL();
+            update(ref(db, `classes/${window.currentClass}/rooms/${window.currentRoom}`), {
+                sketch: dataUrl,
+                artist: window.userName
+            });
+        }
+
+        window.clearCompCanvas = (confirmClear = true) => {
+            if(confirmClear && !confirm("Weet je zeker dat je de schets wilt wissen?")) return;
+            const canvas = document.getElementById('compDrawCanvas');
+            if(canvas) {
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            syncCompCanvas();
+        };
 
         const DOSSIERS_25 = [
             {
                 "id": 1,
                 "title": "Woninginbraak Stationskwartier",
-                "cfg": { "skin": "light", "hair": "cap", "jacket": "hoodie", "jacketColor": "#1e232a", "pants": "jeans", "pantsColor": "#2b4c7e", "shoes": "sneakers", "accessory": "backpack" },
                 "text": "De getuige zag een man van circa 25 tot 30 jaar oud met een slank postuur en een lichte huidskleur. Hij droeg een zwarte baseballpet met de klep naar voren. Aan zijn bovenlichaam had hij een zwarte hoodie met een grote buidelzak aan. Daaronder droeg hij een klassieke blauwe spijkerbroek en hij liep op opvallend witte sneakers. Over zijn beide schouders hing een donkere rugzak met gesloten borstriemen. De man rende hard weg in de richting van perron 2."
             },
             {
                 "id": 2,
                 "title": "Straatroof Singelpark",
-                "cfg": { "skin": "tinted", "hair": "short", "jacket": "bomber", "jacketColor": "#2e4c27", "pants": "jogging", "pantsColor": "#616161", "shoes": "runners", "accessory": "crossbody" },
                 "text": "De getuige verklaarde dat de dader een man van ongeveer 35 jaar betrof met een getinte huidskleur en een breed postuur. Hij had kort zwart haar. Hij droeg een glanzend legergroen bomberjack met een ritssluiting op de mouw. Daaronder had hij een grijze joggingbroek aan en hij droeg donkere sportschoenen met een neon zool. Diagonaal over zijn borst hing een zwarte schoudertas. Hij stapte haastig op een zwarte fatbike en verdween richting het stadscentrum."
             },
             {
                 "id": 3,
                 "title": "Zakkenrollerij Marktplein",
-                "cfg": { "skin": "dark", "hair": "beanie", "jacket": "parka", "jacketColor": "#1b3a6b", "pants": "cargo", "pantsColor": "#3e4f3a", "shoes": "boots", "accessory": "none" },
                 "text": "Volgens de aangever ging het om een man van circa 22 jaar oud met een donkerbruine huidskleur en een tenger postuur. Op zijn hoofd droeg hij een donkergrijze gebreide muts. De verdachte droeg een lange donkerblauwe winterparka tot over zijn bovenbenen. Aan zijn onderlichaam had hij een donkergroene cargobroek met grote zijzakken aan en hij droeg zware donkere werkkisten. Hij had geen zichtbare tassen bij zich en liep met versnelde pas weg tussen het winkelend publiek."
             },
             {
                 "id": 4,
                 "title": "Winkeldiefstal Drogisterij",
-                "cfg": { "skin": "deep_dark", "hair": "bald", "jacket": "trackjacket", "jacketColor": "#b71c1c", "pants": "jeans", "pantsColor": "#212121", "shoes": "runners", "accessory": "waistbag" },
                 "text": "De beveiliger zag een man van naar schatting 28 jaar met een diep donkere huidskleur en een atletische bouw. De verdachte was volledig kaal. Hij viel direct op door een felrood trainingsjack met witte banen over de mouwen. Daaronder droeg hij een zwarte spijkerbroek en donkere sportschoenen met felle details. Om zijn borst zat een zwart heuptasje vastgegespt. De verdachte vluchtte te voet in hoog tempo de parkeergarage in."
             },
             {
                 "id": 5,
                 "title": "Poging Overval Tankstation",
-                "cfg": { "skin": "light", "hair": "wavy", "jacket": "sweater", "jacketColor": "#cfd8dc", "pants": "pantalon", "pantsColor": "#212121", "shoes": "sneakers", "accessory": "glasses" },
                 "text": "De caissière omschreef de man als ongeveer 45 jaar oud, fors gebouwd met een lichte huidskleur. Hij bezat halflang donker golvend haar tot over zijn oren. Hij droeg een nette lichtgrijze sweater met een ronde hals en een strakke zwarte pantalon met een duidelijke vouwlijn. Aan zijn voeten droeg hij witte sneakers en op zijn neus rustte een donkere zonnebril. Hij verliet het tankstation rennend in noordelijke richting."
             }
         ];
-
-        function renderWitnessSvg(cfg) {
-            return `<svg viewBox="0 0 320 540" style="width:105px; height:160px; background:#faf8f3; border:2px solid #3e3730; border-radius:6px; flex-shrink:0;">
-                ${generateBodySVG(cfg)}
-            </svg>`;
-        }
 
         function updateWitnessDossierView() {
             const container = document.getElementById('witnessDossierContainer');
@@ -1434,69 +1396,31 @@
             document.getElementById('dossierNumLabel').innerText = `Dossier #${String(d.id).padStart(2, '0')}`;
             document.getElementById('dossierTitle').innerText = `Zaak: ${d.title}`;
             document.getElementById('dossierText').innerText = d.text;
-            document.getElementById('dossierSvgWrap').innerHTML = renderWitnessSvg(d.cfg);
             container.style.display = 'block';
         }
-
-        function renderComposite() {
-            document.getElementById('composite-svg').innerHTML = generateBodySVG(compositeState);
-            document.getElementById('sketch-caption').innerHTML = `Dossier: <strong>${window.currentRoom}</strong>`;
-        }
-
-        window.switchCategory = (cat) => {
-            window.activeCategory = cat;
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('onclick').includes(`'${cat}'`));
-            });
-
-            const deck = document.getElementById('partsDeck');
-            deck.innerHTML = "";
-
-            COMPOSITE_PARTS[cat].forEach(item => {
-                const card = document.createElement('div');
-                card.className = `part-opt ${compositeState[cat] === item.id ? 'active' : ''}`;
-                
-                let preview = "";
-                if (cat === 'skin' || cat === 'jacketColor' || cat === 'pantsColor') {
-                    const c = item.color || item.hex;
-                    preview = `<div style="width:28px; height:28px; background:${c}; border-radius:50%; margin:0 auto; border:2px solid #37474f;"></div>`;
-                } else {
-                    const icon = item.icon || 'fa-shirt';
-                    preview = `<i class="fa-solid ${icon}" style="font-size:22px; color:#546e7a;"></i>`;
-                }
-
-                card.innerHTML = `${preview}<span>${item.name}</span>`;
-                card.onclick = () => window.selectPart(cat, item.id);
-                deck.appendChild(card);
-            });
-        };
-
-        window.selectPart = (cat, id) => {
-            if(window.userRole !== 'rechercheur') return alert("Alleen de Compositeur mag onderdelen selecteren!");
-            compositeState[cat] = id;
-            renderComposite();
-            window.switchCategory(cat);
-            update(ref(db, `classes/${window.currentClass}/rooms/${window.currentRoom}/composite`), compositeState);
-        };
 
         window.setRole = (role) => {
             window.userRole = role;
             const badge = document.getElementById('roleBadgeContainer');
             const txt = document.getElementById('liveSignalementIn');
-            const deck = document.querySelector('.comp-right');
+            const toolDeck = document.querySelector('.comp-right');
 
             if(role === 'getuige') {
-                badge.innerHTML = `<div class="role-pill" style="background:#ffe0b2; color:#e65100; border:1px solid #ffb74d;">👀 Rol: Ooggetuige (Blijf bij het Plaats Delict)</div>`;
+                badge.innerHTML = `<div class="role-pill" style="background:#ffe0b2; color:#e65100; border:1px solid #ffb74d;">👀 Rol: Ooggetuige (Beschrijf de dader via de Porto)</div>`;
                 txt.removeAttribute('readonly');
                 txt.style.background = '#ffffff';
-                deck.style.opacity = '0.35';
-                deck.style.pointerEvents = 'none';
+                if(toolDeck) {
+                    toolDeck.style.opacity = '0.35';
+                    toolDeck.style.pointerEvents = 'none';
+                }
             } else {
-                badge.innerHTML = `<div class="role-pill" style="background:#c8e6c9; color:#1b5e20; border:1px solid #81c784;">🎨 Rol: Compositeur (Zoek een andere ruimte!)</div>`;
+                badge.innerHTML = `<div class="role-pill" style="background:#c8e6c9; color:#1b5e20; border:1px solid #81c784;">🎨 Rol: Compositeur (Teken wat de getuige dicteert!)</div>`;
                 txt.setAttribute('readonly', 'true');
                 txt.style.background = '#f1f3f4';
-                deck.style.opacity = '1';
-                deck.style.pointerEvents = 'auto';
+                if(toolDeck) {
+                    toolDeck.style.opacity = '1';
+                    toolDeck.style.pointerEvents = 'auto';
+                }
             }
             updateWitnessDossierView();
         };
@@ -1520,6 +1444,7 @@
         window.switchRoom = () => {
             window.currentRoom = document.getElementById('teamRoomSelect').value;
             document.getElementById('radioChannelName').innerText = `CH-01 [${window.currentRoom}]`;
+            document.getElementById('sketch-caption').innerText = `Dossier: ${window.currentRoom}`;
             setupRoomListener();
             updateWitnessDossierView();
         };
@@ -1536,9 +1461,18 @@
                 const data = snap.val();
                 if(!data) return;
 
-                if(data.composite) {
-                    Object.assign(compositeState, data.composite);
-                    renderComposite();
+                // Sync de composiettekening live naar beide duo-partners
+                if(data.sketch && window.userRole !== 'rechercheur') {
+                    const canvas = document.getElementById('compDrawCanvas');
+                    if(canvas) {
+                        const ctx = canvas.getContext('2d');
+                        const img = new Image();
+                        img.onload = () => {
+                            ctx.clearRect(0,0,canvas.width,canvas.height);
+                            ctx.drawImage(img, 0, 0);
+                        };
+                        img.src = data.sketch;
+                    }
                 }
 
                 if(window.userRole === 'rechercheur' && data.signalement !== undefined) {
@@ -1563,20 +1497,9 @@
             });
         }
 
-        window.resetComposite = () => {
-            if(confirm("Composiet wissen voor dit duo?")) {
-                Object.assign(compositeState, {
-                    skin: 'light', hair: 'short', jacket: 'hoodie', jacketColor: '#1e232a',
-                    pants: 'jeans', pantsColor: '#2b4c7e', shoes: 'sneakers', accessory: 'none'
-                });
-                renderComposite();
-                update(ref(db, `classes/${window.currentClass}/rooms/${window.currentRoom}/composite`), compositeState);
-            }
-        };
-
         window.exportSignalement = () => {
             const txt = document.getElementById('liveSignalementIn').value.trim();
-            if(!txt) return alert("Typ eerst een signalement in!");
+            if(!txt) return alert("Typ of dicteer eerst een signalement!");
 
             push(ref(db, `classes/${window.currentClass}/feed`), {
                 user: `${window.currentRoom} (${window.userName})`,
@@ -1584,7 +1507,7 @@
                 timestamp: Date.now()
             });
 
-            alert("Dossier ingezonden naar de plenaire Korpsfeed!");
+            alert("Signalement ingezonden naar de plenaire Korpsfeed!");
         };
 
         /* ================= 48 PACMAN WOORDEN ================= */
@@ -1661,8 +1584,7 @@
             setupDigibordDrawing();
             setupGlobalDragEvents();
             setupRoomListener();
-            renderComposite();
-            window.switchCategory('skin');
+            initCompDrawingCanvas();
             window.setRole('rechercheur');
             initPacmanGame();
         };
@@ -1778,7 +1700,7 @@
             c.height = c.parentElement.clientHeight;
         }
 
-        /* ================= PACMAN SPEL LOGICA MET GEVANGENIS-RESPAWN & TUNNEL-FIX ================= */
+        /* ================= PACMAN SPEL LOGICA MET DIRECTE UITBRAAK IN LEVEL 1 ================= */
         const P_COLS = 25, P_ROWS = 30, P_TILE = 22;
         let pMap = [], pTotalDots = 0, pScore = 0, pLevel = 1, pLives = 3;
         let pGameRunning = false, pTurboTimer = 0, pFlash = false;
@@ -1787,12 +1709,12 @@
 
         const pCar = { x: 12, y: 18, px: 12*P_TILE, py: 18*P_TILE, dx: 0, dy: 0, ndx: 0, ndy: 0, spd: 2.2, angle: 0 };
         
-        // 4 Spookjes/Dieven met gevangenis-status en uitbraak-timer
+        // 4 Spookjes/Dieven met directe uitbraak-routine (exitDelay) in Level 1
         const pThieves = [
-            { id: 1, color: "#e53935", x: 12, y: 11, px: 12*P_TILE, py: 11*P_TILE, dx: 0, dy: -1, spd: 1.8, scared: false, inJail: true, exitDelay: 20 },
-            { id: 2, color: "#ff9800", x: 11, y: 11, px: 11*P_TILE, py: 11*P_TILE, dx: 0, dy: -1, spd: 1.7, scared: false, inJail: true, exitDelay: 90 },
-            { id: 3, color: "#00e5ff", x: 13, y: 11, px: 13*P_TILE, py: 11*P_TILE, dx: 0, dy: -1, spd: 1.6, scared: false, inJail: true, exitDelay: 160 },
-            { id: 4, color: "#e91e63", x: 12, y: 12, px: 12*P_TILE, py: 12*P_TILE, dx: 0, dy: -1, spd: 1.5, scared: false, inJail: true, exitDelay: 230 }
+            { id: 1, color: "#e53935", x: 12, y: 11, px: 12*P_TILE, py: 11*P_TILE, dx: 0, dy: -1, spd: 1.8, scared: false, inJail: true, exitDelay: 0 },
+            { id: 2, color: "#ff9800", x: 11, y: 11, px: 11*P_TILE, py: 11*P_TILE, dx: 0, dy: -1, spd: 1.7, scared: false, inJail: true, exitDelay: 35 },
+            { id: 3, color: "#00e5ff", x: 13, y: 11, px: 13*P_TILE, py: 11*P_TILE, dx: 0, dy: -1, spd: 1.6, scared: false, inJail: true, exitDelay: 70 },
+            { id: 4, color: "#e91e63", x: 12, y: 11, px: 12*P_TILE, py: 11*P_TILE, dx: 0, dy: -1, spd: 1.5, scared: false, inJail: true, exitDelay: 105 }
         ];
 
         const pTemplate = [
@@ -1846,11 +1768,11 @@
         function pResetPositions() {
             pCar.x = 12; pCar.y = 18; pCar.px = 12*P_TILE; pCar.py = 18*P_TILE;
             pCar.dx = 0; pCar.dy = 0; pCar.ndx = 0; pCar.ndy = 0; pCar.angle = 0;
-            const bSpd = 1.6 + (pLevel * 0.18);
+            const bSpd = 1.6 + (pLevel * 0.15);
             
             pThieves.forEach((t, i) => {
                 t.x = 11 + (i % 3); 
-                t.y = 11 + Math.floor(i / 3);
+                t.y = 11;
                 t.px = t.x * P_TILE; 
                 t.py = t.y * P_TILE;
                 t.dx = 0; 
@@ -1858,7 +1780,7 @@
                 t.spd = bSpd + (i * 0.05); 
                 t.scared = false;
                 t.inJail = true;
-                t.exitDelay = i * 45; // Getimed uitbreken
+                t.exitDelay = i * 35; // Rood direct bij de start, oranje/cyan/pink vlak erna!
             });
         }
 
@@ -1876,7 +1798,7 @@
             if (c < 0 || c >= P_COLS || r < 0 || r >= P_ROWS) return false;
             const t = pMap[r][c];
             if (t === 1) return false;
-            // Tralies van de cel (tile 4): alleen voor spoken die de cel uitbreken
+            // Tralies van de cel (tile 4): uitsluitend voor spoken die naar buiten breken
             if (t === 4) return (isG && inJail);
             return true;
         }
@@ -1992,7 +1914,37 @@
 
             // Update Spookjes / Dieven
             pThieves.forEach(t => {
-                // Tunnel wrap-around voor spoken (rij 14): verdwijnen nooit meer!
+                // 1. Gevangenis-uitbraakroutine (Direct en getimed in Level 1)
+                if (t.inJail) {
+                    if (t.exitDelay > 0) {
+                        t.exitDelay--;
+                    } else {
+                        const targetX = 12 * P_TILE;
+                        const targetY = 8 * P_TILE;
+                        const exitSpd = 1.6;
+
+                        // Eerst horizontaal centreren voor de tralies (x=12)
+                        if (Math.abs(t.px - targetX) > 1.2) {
+                            t.px += (t.px < targetX ? 1 : -1) * exitSpd;
+                        } else {
+                            t.px = targetX;
+                            t.x = 12;
+                            // Vervolgens verticaal omhoog door de tralies (row 9) naar de gang (row 8)
+                            t.py -= exitSpd;
+
+                            if (t.py <= targetY) {
+                                t.py = targetY;
+                                t.y = 8;
+                                t.inJail = false; // Vrij in het doolhof!
+                                t.dx = (t.id % 2 === 0) ? 1 : -1;
+                                t.dy = 0;
+                            }
+                        }
+                    }
+                    return; // Zolang in cel, niet door reguliere doolhof-logica
+                }
+
+                // Tunnel wrap-around voor spoken (rij 14): verdwijnen nooit in de tunnel
                 if (t.y === 14) {
                     if (t.px < -P_TILE / 2) {
                         t.px = (P_COLS - 1) * P_TILE;
@@ -2003,38 +1955,20 @@
                     }
                 }
 
-                // Gevangenis-ontsnappingsroutine
-                if (t.inJail) {
-                    if (t.exitDelay > 0) {
-                        t.exitDelay--;
-                    } else {
-                        // Beweeg eerst naar het midden (x=12), dan naar boven door de tralies (y=8)
-                        if (t.x < 12) { t.dx = 1; t.dy = 0; }
-                        else if (t.x > 12) { t.dx = -1; t.dy = 0; }
-                        else { t.dx = 0; t.dy = -1; }
-
-                        if (t.y <= 8) {
-                            t.inJail = false; // Buiten de cel! Nu vrij in het doolhof
-                        }
-                    }
-                }
-
                 const tgx = Math.round(t.px / P_TILE), tgy = Math.round(t.py / P_TILE);
                 if (Math.abs(t.px - tgx*P_TILE) < 2 && Math.abs(t.py - tgy*P_TILE) < 2) {
                     t.px = tgx*P_TILE; t.py = tgy*P_TILE; t.x = tgx; t.y = tgy;
 
-                    if (!t.inJail) {
-                        const dirs = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}].filter(d => {
-                            if (d.x === -t.dx && d.y === -t.dy) return false;
-                            return pCanMove(t.x + d.x, t.y + d.y, true, false);
-                        });
+                    const dirs = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}].filter(d => {
+                        if (d.x === -t.dx && d.y === -t.dy) return false;
+                        return pCanMove(t.x + d.x, t.y + d.y, true, false);
+                    });
 
-                        if (dirs.length > 0) {
-                            const chosen = dirs[Math.floor(Math.random() * dirs.length)];
-                            t.dx = chosen.x; t.dy = chosen.y;
-                        } else if (pCanMove(t.x - t.dx, t.y - t.dy, true, false)) {
-                            t.dx = -t.dx; t.dy = -t.dy;
-                        }
+                    if (dirs.length > 0) {
+                        const chosen = dirs[Math.floor(Math.random() * dirs.length)];
+                        t.dx = chosen.x; t.dy = chosen.y;
+                    } else if (pCanMove(t.x - t.dx, t.y - t.dy, true, false)) {
+                        t.dx = -t.dx; t.dy = -t.dy;
                     }
                 }
 
@@ -2047,9 +1981,9 @@
                     if (t.scared) {
                         pScore += 200;
                         document.getElementById('pScore').innerText = pScore;
-                        // Respawn in de gevangeniscel
+                        // Respawn in de cel met snelle heruitbraak
                         t.px = 12*P_TILE; t.py = 11*P_TILE; t.x = 12; t.y = 11;
-                        t.scared = false; t.inJail = true; t.exitDelay = 40;
+                        t.scared = false; t.inJail = true; t.exitDelay = 30;
                     } else {
                         pHandleCaught();
                     }
