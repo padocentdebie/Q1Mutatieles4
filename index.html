@@ -1582,7 +1582,7 @@
         window.login = () => {
             const klas = document.getElementById('classSelect').value;
             const naam = document.getElementById('studentName').value.trim();
-            if(!klas) return alert("Selecteer eerst een klas!");
+            if(!klas) return alert("Selecteer eerst je klas!");
             if(!naam) return alert("Vul je naam in!");
 
             window.currentClass = klas;
@@ -1600,6 +1600,7 @@
             setupDigibordDrawing();
             setupGlobalDragEvents();
             setupRoomListener();
+            setupPacmanScoreSync();
             window.setRole('rechercheur');
             redrawCompositeBoard();
             initPacmanGame();
@@ -1742,6 +1743,8 @@
         let pGameRunning = false, pTurboTimer = 0, pFlash = false;
         let pTargetPool = [...PACMAN_VOCABULARY], pCurrentTargets = [], pCurrentTen = [];
         let pCompleted = new Set();
+        let pClassScores = {};
+        let pScoreSyncTimer = 0;
 
         const pCar = { x: 12, y: 18, px: 12*P_TILE, py: 18*P_TILE, dx: 0, dy: 0, ndx: 0, ndy: 0, spd: 2.2, angle: 0 };
         const pThieves = [
@@ -1804,10 +1807,13 @@
             pCar.dx = 0; pCar.dy = 0; pCar.ndx = 0; pCar.ndy = 0; pCar.angle = 0;
             const bSpd = 1.6 + (pLevel * 0.2);
             pThieves.forEach((t, i) => {
-                t.x = 11 + (i % 3); t.y = 11 + Math.floor(i / 3);
+                // FIX: geldige startposities binnen de cel (niet in de muur)
+                t.x = 11 + (i % 3); t.y = 10 + Math.floor(i / 3);
                 t.px = t.x * P_TILE; t.py = t.y * P_TILE;
-                t.dx = (i % 2 === 0) ? 1 : -1; t.dy = 0;
+                t.dx = 0; t.dy = 0;
                 t.spd = bSpd + (i * 0.08); t.scared = false;
+                // FIX: dieven komen na korte, gefaseerde wachttijd uit de gevangenis
+                t.caged = 30 + (i * 90);
             });
         }
 
@@ -1883,6 +1889,12 @@
         function pUpdate() {
             if (!pGameRunning) return;
 
+            // FIX: score van deze student live doorsturen naar het klasleaderboard
+            if (++pScoreSyncTimer >= 90) {
+                pScoreSyncTimer = 0;
+                syncPScoreToFirebase();
+            }
+
             const gx = Math.round(pCar.px / P_TILE), gy = Math.round(pCar.py / P_TILE);
             if (Math.abs(pCar.px - gx*P_TILE) < 2 && Math.abs(pCar.py - gy*P_TILE) < 2) {
                 pCar.px = gx*P_TILE; pCar.py = gy*P_TILE; pCar.x = gx; pCar.y = gy;
@@ -1931,16 +1943,38 @@
                 const tgx = Math.round(t.px / P_TILE), tgy = Math.round(t.py / P_TILE);
                 if (Math.abs(t.px - tgx*P_TILE) < 2 && Math.abs(t.py - tgy*P_TILE) < 2) {
                     t.px = tgx*P_TILE; t.py = tgy*P_TILE; t.x = tgx; t.y = tgy;
-                    const dirs = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}].filter(d => {
-                        if (d.x === -t.dx && d.y === -t.dy) return false;
-                        return pCanMove(t.x + d.x, t.y + d.y, true);
-                    });
 
-                    if (dirs.length > 0) {
-                        const chosen = dirs[Math.floor(Math.random() * dirs.length)];
-                        t.dx = chosen.x; t.dy = chosen.y;
-                    } else if (pCanMove(t.x - t.dx, t.y - t.dy, true)) {
-                        t.dx = -t.dx; t.dy = -t.dy;
+                    // FIX: tunnel-wrap zodat dieven nooit buiten het bord verdwijnen
+                    if (t.y === 14 && t.x <= 0 && t.dx === -1) { t.x = P_COLS-1; t.px = (P_COLS-1)*P_TILE; }
+                    else if (t.y === 14 && t.x >= P_COLS-1 && t.dx === 1) { t.x = 0; t.px = 0; }
+
+                    let gedwongen = false;
+
+                    // FIX: dief zit zijn straftijd uit in de cel
+                    if (t.caged > 0) {
+                        t.caged--;
+                        t.dx = 0; t.dy = 0;
+                        gedwongen = true;
+                    } else if (t.x >= 9 && t.x <= 15 && t.y >= 10 && t.y <= 11) {
+                        // FIX: dief verlaat de cel gedwongen via de poort (rij 9)
+                        if (t.x < 11 && pCanMove(t.x + 1, t.y, true)) { t.dx = 1; t.dy = 0; }
+                        else if (t.x > 13 && pCanMove(t.x - 1, t.y, true)) { t.dx = -1; t.dy = 0; }
+                        else if (pCanMove(t.x, t.y - 1, true)) { t.dx = 0; t.dy = -1; }
+                        gedwongen = true;
+                    }
+
+                    if (!gedwongen) {
+                        const dirs = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}].filter(d => {
+                            if (d.x === -t.dx && d.y === -t.dy) return false;
+                            return pCanMove(t.x + d.x, t.y + d.y, true);
+                        });
+
+                        if (dirs.length > 0) {
+                            const chosen = dirs[Math.floor(Math.random() * dirs.length)];
+                            t.dx = chosen.x; t.dy = chosen.y;
+                        } else if (pCanMove(t.x - t.dx, t.y - t.dy, true)) {
+                            t.dx = -t.dx; t.dy = -t.dy;
+                        }
                     }
                 }
                 const curSpd = t.scared ? t.spd * 0.6 : t.spd;
@@ -1951,7 +1985,8 @@
                     if (t.scared) {
                         pScore += 200;
                         document.getElementById('pScore').innerText = pScore;
-                        t.px = 12*P_TILE; t.py = 11*P_TILE; t.x = 12; t.y = 11; t.scared = false;
+                        // FIX: alleen bij arrestatie terug naar de cel (en daarna opnieuw vrijlating)
+                        t.px = 12*P_TILE; t.py = 11*P_TILE; t.x = 12; t.y = 11; t.scared = false; t.caged = 90;
                     } else {
                         pHandleCaught();
                     }
@@ -2074,23 +2109,48 @@
             entries.sort((a,b) => b.score - a.score);
             localStorage.setItem(key, JSON.stringify(entries.slice(0, 8)));
             updatePLeaderboard();
+            syncPScoreToFirebase();
         }
 
         function updatePLeaderboard() {
             if(!window.currentClass) return;
             const list = document.getElementById('pLeaderboard');
-            const entries = JSON.parse(localStorage.getItem(`p_score_${window.currentClass}`) || "[]");
+            if(!list) return;
+            const entries = Object.values(pClassScores || {});
             list.innerHTML = "";
             if (entries.length === 0) {
                 list.innerHTML = "<li style='color:#78909c;'>Nog geen scores in deze klas.</li>";
                 return;
             }
+            entries.sort((a,b) => b.score - a.score);
             entries.forEach((e, idx) => {
                 const li = document.createElement('li');
                 li.style.padding = "4px 0";
                 li.style.borderBottom = "1px solid rgba(255,255,255,0.08)";
                 li.innerHTML = `<strong>#${idx+1} ${e.name}</strong> (Lvl ${e.level}) - <span style="color:var(--gold);">${e.score} pt</span>`;
                 list.appendChild(li);
+            });
+        }
+
+        /* FIX: live puntentelling per ingelogde student via Firebase */
+        function pNameKey() {
+            return (window.userName || "Agent").replace(/[^a-zA-Z0-9]/g, '_');
+        }
+
+        function syncPScoreToFirebase() {
+            if (!window.currentClass || !window.userName || pScore <= 0) return;
+            set(ref(db, `classes/${window.currentClass}/pacmanScores/${pNameKey()}`), {
+                name: window.userName,
+                score: pScore,
+                level: pLevel,
+                ts: Date.now()
+            });
+        }
+
+        function setupPacmanScoreSync() {
+            onValue(ref(db, `classes/${window.currentClass}/pacmanScores`), (snap) => {
+                pClassScores = snap.val() || {};
+                updatePLeaderboard();
             });
         }
 
