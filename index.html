@@ -1153,7 +1153,7 @@
             playStaticBurst();
             document.getElementById('radioLcd').className = "radio-lcd receiving";
             document.getElementById('radioStatusText').innerText = "ONTVANGEN... 📻";
-            document.getElementById('radioLog').innerText = `Inkomend van ${data.senderRole} (${data.senderName})`;
+            document.getElementById('radioLog').innerText = `Inkomend van ${data.senderName}`;
 
             const audio = new Audio(data.audio);
             audio.onended = () => {
@@ -1510,7 +1510,7 @@
             alert("Signalement ingezonden naar de plenaire Korpsfeed!");
         };
 
-        /* ================= 48 PACMAN WOORDEN ================= */
+        /* ================= 48 PACMAN WOORDEN MET GEÜPDATETE DEFINITIES ================= */
         const PACMAN_VOCABULARY = [
             { word: "determineren", def: "bepalen, vaststellen op grond van bepaalde kenmerken" },
             { word: "souterrain", def: "ruimte van een woning die gedeeltelijk beneden straatniveau ligt" },
@@ -1528,7 +1528,7 @@
             { word: "liberaal", def: "ruimdenkend; onbekrompen" },
             { word: "diversificatie", def: "risico door voor verscheidenheid te kiezen" },
             { word: "fecaliën", def: "uitwerpselen" },
-            { word: "contingent", def: "bepaalde hoeveelheid, verplicht aandeel van de markt" },
+            { word: "contingent", def: "groep militairen of agenten" },
             { word: "summier", def: "kort en bondig" },
             { word: "ethiek", def: "de leer van goed en kwaad" },
             { word: "respijt", def: "uitstel" },
@@ -1543,7 +1543,7 @@
             { word: "prominent", def: "vooraanstaand; belangrijk" },
             { word: "collaborateur", def: "iemand die in een bezet land met de bezetters samenwerkt" },
             { word: "delinquent", def: "misdadiger, crimineel" },
-            { word: "ampel", def: "uitvoering, omstandigheid" },
+            { word: "ampel", def: "uitvoerig, omstandig" },
             { word: "paradigma", def: "voorbeeld; rij van mogelijkheden" },
             { word: "stabiliteit", def: "duurzaamheid; bestendigheid" },
             { word: "fresco", def: "muurschildering met waterverf op verse kalk" },
@@ -1700,7 +1700,7 @@
             c.height = c.parentElement.clientHeight;
         }
 
-        /* ================= PACMAN SPEL LOGICA MET DIRECTE UITBRAAK IN LEVEL 1 ================= */
+        /* ================= PACMAN SPEL LOGICA MET SOEPELE DOOLHOF-PATROUILLE ================= */
         const P_COLS = 25, P_ROWS = 30, P_TILE = 22;
         let pMap = [], pTotalDots = 0, pScore = 0, pLevel = 1, pLives = 3;
         let pGameRunning = false, pTurboTimer = 0, pFlash = false;
@@ -1709,7 +1709,7 @@
 
         const pCar = { x: 12, y: 18, px: 12*P_TILE, py: 18*P_TILE, dx: 0, dy: 0, ndx: 0, ndy: 0, spd: 2.2, angle: 0 };
         
-        // 4 Spookjes/Dieven met directe uitbraak-routine (exitDelay) in Level 1
+        // 4 Spookjes/Dieven met directe uitbraak-routine (exitDelay)
         const pThieves = [
             { id: 1, color: "#e53935", x: 12, y: 11, px: 12*P_TILE, py: 11*P_TILE, dx: 0, dy: -1, spd: 1.8, scared: false, inJail: true, exitDelay: 0 },
             { id: 2, color: "#ff9800", x: 11, y: 11, px: 11*P_TILE, py: 11*P_TILE, dx: 0, dy: -1, spd: 1.7, scared: false, inJail: true, exitDelay: 35 },
@@ -1780,7 +1780,7 @@
                 t.spd = bSpd + (i * 0.05); 
                 t.scared = false;
                 t.inJail = true;
-                t.exitDelay = i * 35; // Rood direct bij de start, oranje/cyan/pink vlak erna!
+                t.exitDelay = i * 35; // Rood meteen (0), oranje op 35, cyan op 70, roze op 105
             });
         }
 
@@ -1914,7 +1914,7 @@
 
             // Update Spookjes / Dieven
             pThieves.forEach(t => {
-                // 1. Gevangenis-uitbraakroutine (Direct en getimed in Level 1)
+                // 1. Gevangenis-uitbraakroutine
                 if (t.inJail) {
                     if (t.exitDelay > 0) {
                         t.exitDelay--;
@@ -1955,26 +1955,41 @@
                     }
                 }
 
-                const tgx = Math.round(t.px / P_TILE), tgy = Math.round(t.py / P_TILE);
-                if (Math.abs(t.px - tgx*P_TILE) < 2 && Math.abs(t.py - tgy*P_TILE) < 2) {
-                    t.px = tgx*P_TILE; t.py = tgy*P_TILE; t.x = tgx; t.y = tgy;
+                const curSpd = t.scared ? (t.spd * 0.6) : t.spd;
+                t.px += t.dx * curSpd;
+                t.py += t.dy * curSpd;
 
+                // Continue doolhof-beweging: controleer of het spookje een nieuw tegelcentrum bereikt
+                let reachedTile = false;
+                if (t.dx > 0 && t.px >= (t.x + 1) * P_TILE) {
+                    t.x += 1; t.px = t.x * P_TILE; reachedTile = true;
+                } else if (t.dx < 0 && t.px <= (t.x - 1) * P_TILE) {
+                    t.x -= 1; t.px = t.x * P_TILE; reachedTile = true;
+                } else if (t.dy > 0 && t.py >= (t.y + 1) * P_TILE) {
+                    t.y += 1; t.py = t.y * P_TILE; reachedTile = true;
+                } else if (t.dy < 0 && t.py <= (t.y - 1) * P_TILE) {
+                    t.y -= 1; t.py = t.y * P_TILE; reachedTile = true;
+                }
+
+                if (reachedTile || (t.dx === 0 && t.dy === 0)) {
                     const dirs = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}].filter(d => {
+                        // Niet direct 180 graden omdraaien tenzij doodlopend
                         if (d.x === -t.dx && d.y === -t.dy) return false;
                         return pCanMove(t.x + d.x, t.y + d.y, true, false);
                     });
 
                     if (dirs.length > 0) {
                         const chosen = dirs[Math.floor(Math.random() * dirs.length)];
-                        t.dx = chosen.x; t.dy = chosen.y;
+                        t.dx = chosen.x;
+                        t.dy = chosen.y;
                     } else if (pCanMove(t.x - t.dx, t.y - t.dy, true, false)) {
-                        t.dx = -t.dx; t.dy = -t.dy;
+                        t.dx = -t.dx;
+                        t.dy = -t.dy;
+                    } else {
+                        t.dx = 0;
+                        t.dy = 0;
                     }
                 }
-
-                const curSpd = t.scared ? t.spd * 0.6 : t.spd;
-                t.px += t.dx * curSpd;
-                t.py += t.dy * curSpd;
 
                 // Aanraking controleren
                 if (Math.hypot(pCar.px - t.px, pCar.py - t.py) < 14) {
